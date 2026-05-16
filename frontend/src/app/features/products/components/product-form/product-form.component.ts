@@ -1,3 +1,5 @@
+/* eslint-disable @angular-eslint/prefer-inject */
+/* eslint-disable @angular-eslint/no-output-native */
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
