@@ -1,0 +1,13 @@
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/repository/ProductRepository.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/service/ProductService.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/controller/ProductController.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/config/DataInitializer.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/config/CorsConfig.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/exception/GlobalExceptionHandler.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/exception/ResourceNotFoundException.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/service/impl/ProductServiceImpl.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/dto/ProductDto.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/mapper/ProductMapper.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/ProductCrudApplication.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/entity/Product.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/dto/ApiResponse.java

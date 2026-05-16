@@ -1,0 +1,74 @@
+<nz-modal
+  [nzVisible]="visible"
+  [nzTitle]="isEditMode ? '✏️ Modifier le produit' : '➕ Nouveau produit'"
+  [nzWidth]="640"
+  [nzFooter]="null"
+  (nzOnCancel)="onCancel()">
+
+  <ng-container *nzModalContent>
+    <nz-spin [nzSpinning]="loading">
+      <form nz-form [formGroup]="form" nzLayout="vertical" (ngSubmit)="onSubmit()">
+
+        <nz-form-item>
+          <nz-form-label nzRequired>Nom du produit</nz-form-label>
+          <nz-form-control nzErrorTip="Le nom est obligatoire (max 100 caractères)">
+            <input nz-input formControlName="name" placeholder="Ex: iPhone 15 Pro" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Description</nz-form-label>
+          <nz-form-control nzErrorTip="Max 500 caractères">
+            <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+              placeholder="Description du produit..."></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+          <nz-form-item>
+            <nz-form-label nzRequired>Prix (€)</nz-form-label>
+            <nz-form-control nzErrorTip="Le prix doit être positif">
+              <nz-input-number formControlName="price" [nzMin]="0.01" [nzStep]="0.01"
+                [nzPrecision]="2" nzPlaceHolder="0.00" style="width: 100%"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label nzRequired>Quantité</nz-form-label>
+            <nz-form-control nzErrorTip="La quantité doit être ≥ 0">
+              <nz-input-number formControlName="quantity" [nzMin]="0" [nzStep]="1"
+                nzPlaceHolder="0" style="width: 100%"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+          <nz-form-item>
+            <nz-form-label nzRequired>Catégorie</nz-form-label>
+            <nz-form-control nzErrorTip="La catégorie est obligatoire">
+              <nz-select formControlName="category" nzPlaceHolder="Choisir une catégorie">
+                <nz-option *ngFor="let cat of categories" [nzValue]="cat" [nzLabel]="cat"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label nzRequired>Statut</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="status">
+                <nz-option *ngFor="let s of statuses" [nzValue]="s.value" [nzLabel]="s.label"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #f0f0f0">
+          <button nz-button nzType="default" type="button" (click)="onCancel()">Annuler</button>
+          <button nz-button nzType="primary" type="submit" [nzLoading]="loading">
+            {{ isEditMode ? 'Mettre à jour' : 'Créer le produit' }}
+          </button>
+        </div>
+      </form>
+    </nz-spin>
+  </ng-container>
+</nz-modal>

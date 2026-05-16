@@ -1,0 +1,163 @@
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">
+        <span nz-icon nzType="shop" nzTheme="outline"></span>
+        Gestion des Produits
+      </h1>
+      <p class="page-subtitle">{{ pageData.totalElements }} produit(s) au total</p>
+    </div>
+    <button nz-button nzType="primary" nzSize="large" (click)="openCreate()">
+      <span nz-icon nzType="plus"></span>
+      Nouveau Produit
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <nz-card class="stat-card">
+      <nz-statistic [nzValue]="pageData.totalElements" nzTitle="Total produits"
+        [nzPrefix]="prefixShop"></nz-statistic>
+      <ng-template #prefixShop><span nz-icon nzType="database"></span></ng-template>
+    </nz-card>
+    <nz-card class="stat-card">
+      <nz-statistic
+        [nzValue]="pageData.content | activeCount"
+        nzTitle="Produits actifs"
+        [nzValueStyle]="{ color: '#3f8600' }"
+        [nzPrefix]="prefixCheck"></nz-statistic>
+      <ng-template #prefixCheck><span nz-icon nzType="check-circle" style="color:#3f8600"></span></ng-template>
+    </nz-card>
+    <nz-card class="stat-card">
+      <nz-statistic
+        [nzValue]="pageData.content | lowStockCount"
+        nzTitle="Stock faible"
+        [nzValueStyle]="{ color: '#cf1322' }"
+        [nzPrefix]="prefixWarning"></nz-statistic>
+      <ng-template #prefixWarning><span nz-icon nzType="warning" style="color:#cf1322"></span></ng-template>
+    </nz-card>
+  </div>
+
+  <!-- Filters -->
+  <nz-card class="filter-card">
+    <div class="filter-row">
+      <nz-input-group [nzPrefix]="prefixSearch" class="search-input">
+        <input nz-input placeholder="Rechercher un produit..."
+          [ngModel]="filter.search"
+          (ngModelChange)="onSearchChange($event)" />
+      </nz-input-group>
+      <ng-template #prefixSearch><span nz-icon nzType="search"></span></ng-template>
+
+      <nz-select
+        [(ngModel)]="filter.category"
+        nzPlaceHolder="Catégorie"
+        nzAllowClear
+        (ngModelChange)="onFilterChange()"
+        class="filter-select">
+        <nz-option *ngFor="let cat of categories" [nzValue]="cat" [nzLabel]="cat"></nz-option>
+      </nz-select>
+
+      <nz-select
+        [(ngModel)]="filter.status"
+        nzPlaceHolder="Statut"
+        nzAllowClear
+        (ngModelChange)="onFilterChange()"
+        class="filter-select">
+        <nz-option *ngFor="let s of statuses" [nzValue]="s.value" [nzLabel]="s.label"></nz-option>
+      </nz-select>
+
+      <button nz-button nzType="default" (click)="clearFilters()">
+        <span nz-icon nzType="clear"></span>
+        Réinitialiser
+      </button>
+    </div>
+  </nz-card>
+
+  <!-- Table -->
+  <nz-card class="table-card">
+    <nz-table
+      #productTable
+      [nzData]="pageData.content"
+      [nzTotal]="pageData.totalElements"
+      [nzPageIndex]="(filter.page ?? 0) + 1"
+      [nzPageSize]="filter.size ?? 10"
+      [nzLoading]="tableLoading"
+      [nzFrontPagination]="false"
+      (nzPageIndexChange)="onPageChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      [nzPageSizeOptions]="[5, 10, 20, 50]"
+      [nzShowSizeChanger]="true"
+      nzShowQuickJumper
+      [nzScroll]="{ x: '1100px' }">
+
+      <thead>
+        <tr>
+          <th nzWidth="60px">#</th>
+          <th nzWidth="200px">Nom</th>
+          <th>Description</th>
+          <th nzWidth="130px" nzAlign="right">Prix</th>
+          <th nzWidth="100px" nzAlign="center">Stock</th>
+          <th nzWidth="140px">Catégorie</th>
+          <th nzWidth="100px" nzAlign="center">Statut</th>
+          <th nzWidth="140px" nzAlign="center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let product of productTable.data; let i = index">
+          <td class="id-cell">{{ product.id }}</td>
+          <td>
+            <span class="product-name">{{ product.name }}</span>
+          </td>
+          <td>
+            <span class="description-cell" [nz-tooltip]="product.description">
+              {{ product.description || '—' }}
+            </span>
+          </td>
+          <td nzAlign="right">
+            <span class="price-cell">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</span>
+          </td>
+          <td nzAlign="center">
+            <nz-tag [nzColor]="getStockColor(product.quantity)">
+              {{ product.quantity }}
+            </nz-tag>
+          </td>
+          <td>
+            <nz-tag>{{ product.category }}</nz-tag>
+          </td>
+          <td nzAlign="center">
+            <nz-badge
+              [nzStatus]="product.status === 'ACTIVE' ? 'success' : 'error'"
+              [nzText]="getStatusLabel(product.status)">
+            </nz-badge>
+          </td>
+          <td nzAlign="center">
+            <nz-space nzSize="small">
+              <button *nzSpaceItem nz-button nzType="default" nzSize="small"
+                nz-tooltip="Modifier" (click)="openEdit(product)">
+                <span nz-icon nzType="edit"></span>
+              </button>
+              <button *nzSpaceItem nz-button nzDanger nzSize="small"
+                nz-tooltip="Supprimer"
+                nz-popconfirm
+                nzPopconfirmTitle="Supprimer ce produit ?"
+                nzPopconfirmPlacement="left"
+                (nzOnConfirm)="deleteProduct(product.id)">
+                <span nz-icon nzType="delete"></span>
+              </button>
+            </nz-space>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+
+<app-product-form
+  [visible]="formVisible"
+  [product]="selectedProduct"
+  [loading]="formLoading"
+  (save)="onFormSave($event)"
+  (cancel)="onFormCancel()">
+</app-product-form>
