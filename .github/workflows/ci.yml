@@ -127,15 +127,15 @@ jobs:
     needs: [push-docker-images]
     if: always()
     steps:
-- name: Check deployment status
-         run: |
-           if [ "${{ needs.push-docker-images.result }}" == "success" ]; then
-             echo "✅ Docker images successfully pushed to Docker Hub!"
-             echo "🐳 Backend: ${{ env.BACKEND_IMAGE_NAME }}:latest"
-             echo "🐳 Frontend: ${{ env.FRONTEND_IMAGE_NAME }}:latest"
-           elif [ "${{ needs.push-docker-images.result }}" == "skipped" ]; then
-             echo "ℹ️ Docker image push skipped (not a push to main/develop branch)"
-           else
-             echo "❌ Build or deployment failed"
-             exit 1
-           fi
+      - name: Check deployment status
+        run: |
+          if [ "${{ needs.push-docker-images.result }}" == "success" ]; then
+            echo "✅ Docker images successfully pushed to Docker Hub!"
+            echo "🐳 Backend: ${{ env.BACKEND_IMAGE_NAME }}:latest"
+            echo "🐳 Frontend: ${{ env.FRONTEND_IMAGE_NAME }}:latest"
+          elif [ "${{ needs.push-docker-images.result }}" == "skipped" ]; then
+            echo "ℹ️ Docker image push skipped (not a push to main/develop branch)"
+          else
+            echo "❌ Build or deployment failed"
+            exit 1
+          fi
