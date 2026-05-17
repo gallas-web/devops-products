@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-crud-backend
+  namespace: product-crud
+  labels:
+    app: product-crud-backend
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: product-crud-backend
+  template:
+    metadata:
+      labels:
+        app: product-crud-backend
+        version: v1
+    spec:
+      # ImagePullSecrets pour ECR (créé manuellement)
+      imagePullSecrets:
+        - name: ecr-secret
+      
+      containers:
+      - name: backend
+        # ⚠️ REMPLACER: {{AWS_ACCOUNT_ID}} par votre ID AWS (ex: 123456789012)
+        image: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-backend:latest"
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        
+        # Variables d'environnement
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: JAVA_OPTS
+          value: "-Xmx256m -Xms128m"
+        
+        # Probes de santé
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        
+        # Ressources
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        
+        # Logs
+        volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      
+      volumes:
+      - name: logs
+        emptyDir: {}
+      
+      # Affinity pour distribuer les pods
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - product-crud-backend
+              topologyKey: kubernetes.io/hostname

@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: product-crud
+
+resources:
+  - namespace.yaml
+  - backend/deployment.yaml
+  - backend/service.yaml
+  - frontend/deployment.yaml
+  - frontend/service.yaml
+
+# Changer les images pour les déploiements
+images:
+  - name: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-backend"
+    newTag: "latest"
+  - name: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-frontend"
+    newTag: "latest"
+
+commonLabels:
+  app: product-crud
+  managed-by: argocd
+
+commonAnnotations:
+  description: "Product CRUD Application - Managed by ArgoCD"
