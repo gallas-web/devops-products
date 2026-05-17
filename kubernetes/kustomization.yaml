@@ -11,16 +11,11 @@ resources:
   - frontend/deployment.yaml
   - frontend/service.yaml
 
-# Changer les images pour les déploiements
 images:
   - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-backend"
     newTag: "latest"
   - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-frontend"
     newTag: "latest"
-
-commonLabels:
-  app: product-crud
-  managed-by: argocd
 
 commonAnnotations:
   description: "Product CRUD Application - Managed by ArgoCD"
