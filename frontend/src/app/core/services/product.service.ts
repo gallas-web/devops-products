@@ -6,7 +6,7 @@ import { ApiResponse, PageResponse, Product, ProductFilter, ProductRequest } fro
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private readonly API_URL = 'http://localhost:8080/api/v1/products';
+  private readonly API_URL = '/api/v1/products';
 
   constructor(private http: HttpClient) {}
 
