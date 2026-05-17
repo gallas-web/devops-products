@@ -11,10 +11,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - 13.50.142.27.nip.io
+        - 13.61.228.194.nip.io
       secretName: product-crud-tls
   rules:
-    - host: 13.50.142.27.nip.io
+    - host: 13.61.228.194.nip.io
       http:
         paths:
           - path: /
