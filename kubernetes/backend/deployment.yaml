@@ -55,7 +55,8 @@ spec:
         
         # Probes de santé
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /actuator/health
             port: 8080
           initialDelaySeconds: 60
           periodSeconds: 15
@@ -63,7 +64,8 @@ spec:
           failureThreshold: 5
         
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /actuator/health
             port: 8080
           initialDelaySeconds: 60
           periodSeconds: 10
