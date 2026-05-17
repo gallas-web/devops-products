@@ -43,11 +43,20 @@ spec:
         - name: JAVA_OPTS
           value: "-Xmx256m -Xms128m"
         - name: SPRING_DATASOURCE_URL
-          value: "jdbc:postgresql://postgres:5432/productcrud"
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: url
         - name: SPRING_DATASOURCE_USERNAME
-          value: "postgres"
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: username
         - name: SPRING_DATASOURCE_PASSWORD
-          value: "postgres123"
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: password
         - name: SPRING_JPA_HIBERNATE_DDL_AUTO
           value: "create"
         - name: SPRING_JPA_SHOW_SQL
