@@ -13,9 +13,9 @@ resources:
 
 images:
   - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-backend"
-    newTag: "a30114fd0fb983b3f10fe4fa4659ccaa98f280af"
+    newTag: "bf1ccb9a3479dd8fec3fb5f694853051ce3a37e7"
   - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-frontend"
-    newTag: "a30114fd0fb983b3f10fe4fa4659ccaa98f280af"
+    newTag: "bf1ccb9a3479dd8fec3fb5f694853051ce3a37e7"
 
 commonAnnotations:
   description: "Product CRUD Application - Managed by ArgoCD"
