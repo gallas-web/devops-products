@@ -42,6 +42,12 @@ spec:
           value: "production"
         - name: JAVA_OPTS
           value: "-Xmx256m -Xms128m"
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://postgres:5432/productcrud"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "postgres"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "postgres123"
         
         # Probes de santé
         livenessProbe:
