@@ -24,13 +24,11 @@ spec:
         version: v1
     spec:
       # ImagePullSecrets pour ECR (créé manuellement)
-      imagePullSecrets:
-        - name: ecr-secret
       
       containers:
       - name: backend
         # ⚠️ REMPLACER: {{AWS_ACCOUNT_ID}} par votre ID AWS (ex: 123456789012)
-        image: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-backend:latest"
+        image: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-backend:latest"
         imagePullPolicy: Always
         
         ports:

@@ -12,9 +12,9 @@ resources:
 
 # Changer les images pour les déploiements
 images:
-  - name: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-backend"
+  - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-backend"
     newTag: "latest"
-  - name: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-frontend"
+  - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-frontend"
     newTag: "latest"
 
 commonLabels:

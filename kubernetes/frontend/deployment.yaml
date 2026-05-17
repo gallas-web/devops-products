@@ -23,13 +23,11 @@ spec:
         app: product-crud-frontend
         version: v1
     spec:
-      imagePullSecrets:
-        - name: ecr-secret
       
       containers:
       - name: frontend
         # ⚠️ REMPLACER: {{AWS_ACCOUNT_ID}} par votre ID AWS
-        image: "{{AWS_ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/product-crud-frontend:latest"
+        image: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-frontend:latest"
         imagePullPolicy: Always
         
         ports:
