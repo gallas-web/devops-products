@@ -11,7 +11,7 @@ on:
       - develop
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: eu-north-1
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   BACKEND_IMAGE_NAME: product-crud-backend
   FRONTEND_IMAGE_NAME: product-crud-frontend
