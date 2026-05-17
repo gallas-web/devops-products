@@ -53,18 +53,18 @@ spec:
         livenessProbe:
           tcpSocket:
             port: 8080
-          initialDelaySeconds: 45
+          initialDelaySeconds: 60
           periodSeconds: 15
           timeoutSeconds: 5
-          failureThreshold: 3
+          failureThreshold: 5
         
         readinessProbe:
           tcpSocket:
             port: 8080
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 3
-          failureThreshold: 3
+          failureThreshold: 5
         
         # Ressources
         resources:
