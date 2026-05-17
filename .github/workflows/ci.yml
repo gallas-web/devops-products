@@ -84,7 +84,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -127,21 +126,54 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # ─── NOUVEAU JOB ── met à jour kustomization.yaml avec le SHA du commit
+  update-manifests:
+    name: Update Kubernetes Manifests
+    runs-on: ubuntu-latest
+    needs: [push-docker-images]
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Update image tags in kustomization.yaml
+        run: |
+          sed -i "s|newTag:.*|newTag: \"${{ github.sha }}\"|g" \
+            kubernetes/kustomization.yaml
+
+      - name: Verify changes
+        run: |
+          echo "=== kustomization.yaml après mise à jour ==="
+          grep "newTag" kubernetes/kustomization.yaml
+
+      - name: Commit and push manifest update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kubernetes/kustomization.yaml
+          git diff --staged --quiet || git commit -m "ci: update image tags to ${{ github.sha }}"
+          git push
+
   notify-deployment:
     name: Notify Deployment Status
     runs-on: ubuntu-latest
-    needs: [push-docker-images]
+    needs: [update-manifests]
     if: always()
     steps:
       - name: Check deployment status
         run: |
-          if [ "${{ needs.push-docker-images.result }}" == "success" ]; then
-            echo "✅ Docker images successfully pushed to AWS ECR!"
-            echo "🔗 Backend ECR: $AWS_ACCOUNT_ID.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.BACKEND_IMAGE_NAME }}:latest"
-            echo "🔗 Frontend ECR: $AWS_ACCOUNT_ID.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.FRONTEND_IMAGE_NAME }}:latest"
-          elif [ "${{ needs.push-docker-images.result }}" == "skipped" ]; then
-            echo "ℹ️ Docker image push skipped (not a push to main/develop branch)"
+          if [ "${{ needs.update-manifests.result }}" == "success" ]; then
+            echo "✅ Images pushées et manifests mis à jour !"
+            echo "🔖 Tag déployé : ${{ github.sha }}"
+            echo "🚀 ArgoCD va détecter le changement et déployer automatiquement"
+          elif [ "${{ needs.update-manifests.result }}" == "skipped" ]; then
+            echo "ℹ️ Push sur develop — manifests non mis à jour (uniquement sur main)"
           else
-            echo "❌ Build or deployment failed"
+            echo "❌ Pipeline échoué"
             exit 1
           fi
