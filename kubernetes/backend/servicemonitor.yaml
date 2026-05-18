@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: product-crud-backend
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  namespaceSelector:
+    matchNames:
+      - product-crud
+  selector:
+    matchLabels:
+      app: product-crud-backend
+  endpoints:
+    - port: http
+      path: /actuator/prometheus
+      interval: 15s
