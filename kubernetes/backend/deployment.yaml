@@ -58,7 +58,7 @@ spec:
               name: postgres-credentials
               key: password
         - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-          value: "update"
+          value: "create"
         - name: SPRING_JPA_SHOW_SQL
           value: "false"
         
