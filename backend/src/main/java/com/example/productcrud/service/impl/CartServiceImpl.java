@@ -32,7 +32,15 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDto getCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Panier non trouvé"));
+                .orElseGet(() -> {
+                    // Initialize cart if it doesn't exist
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                    Cart newCart = Cart.builder()
+                            .user(user)
+                            .build();
+                    return cartRepository.save(newCart);
+                });
         return mapToCartDto(cart);
     }
 
@@ -40,7 +48,15 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDto addToCart(Long userId, AddToCartRequest request) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Panier non trouvé"));
+                .orElseGet(() -> {
+                    // Initialize cart if it doesn't exist
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                    Cart newCart = Cart.builder()
+                            .user(user)
+                            .build();
+                    return cartRepository.save(newCart);
+                });
 
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new RuntimeException("Produit non trouvé"));
@@ -73,7 +89,15 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDto updateCartItem(Long userId, UpdateCartItemRequest request) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Panier non trouvé"));
+                .orElseGet(() -> {
+                    // Initialize cart if it doesn't exist
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                    Cart newCart = Cart.builder()
+                            .user(user)
+                            .build();
+                    return cartRepository.save(newCart);
+                });
 
         CartItem cartItem = cartItemRepository.findById(request.getCartItemId())
                 .orElseThrow(() -> new RuntimeException("Article du panier non trouvé"));

@@ -61,6 +61,12 @@ spec:
           value: "update"
         - name: SPRING_JPA_SHOW_SQL
           value: "false"
+        - name: AWS_S3_BUCKET
+          value: "product-crud-images-052464239829"
+        - name: AWS_S3_REGION
+          value: "eu-north-1"
+        - name: AWS_S3_BASE_URL
+          value: "https://product-crud-images-052464239829.s3.eu-north-1.amazonaws.com"
         
         # Probes de santé
         livenessProbe:
