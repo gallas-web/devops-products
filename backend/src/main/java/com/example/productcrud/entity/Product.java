@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -21,10 +22,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100, columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, length = 200)
     private String name;
 
-    @Column(length = 500, columnDefinition = "VARCHAR(500)")
+    @Column(length = 2000)
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -33,10 +34,25 @@ public class Product {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(length = 50, columnDefinition = "VARCHAR(50)")
-    private String category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @Column(length = 50, columnDefinition = "VARCHAR(50)")
+    @Column(length = 500)
+    private String imageUrl;
+
+    @Column(length = 1000)
+    private String specifications;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Double rating = 0.0;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer reviewCount = 0;
+
+    @Column(length = 50)
     private String status;
 
     @CreationTimestamp
@@ -45,4 +61,13 @@ public class Product {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
 }

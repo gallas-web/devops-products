@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProductDto {
 
@@ -15,10 +16,10 @@ public class ProductDto {
     @Builder
     public static class Request {
         @NotBlank(message = "Le nom est obligatoire")
-        @Size(max = 100, message = "Le nom ne peut dépasser 100 caractères")
+        @Size(max = 200, message = "Le nom ne peut dépasser 200 caractères")
         private String name;
 
-        @Size(max = 500, message = "La description ne peut dépasser 500 caractères")
+        @Size(max = 2000, message = "La description ne peut dépasser 2000 caractères")
         private String description;
 
         @NotNull(message = "Le prix est obligatoire")
@@ -30,8 +31,14 @@ public class ProductDto {
         @Min(value = 0, message = "La quantité ne peut être négative")
         private Integer quantity;
 
-        @Size(max = 50)
-        private String category;
+        @NotNull(message = "La catégorie est obligatoire")
+        private Long categoryId;
+
+        @Size(max = 500)
+        private String imageUrl;
+
+        @Size(max = 1000)
+        private String specifications;
 
         @Size(max = 50)
         private String status;
@@ -48,8 +55,34 @@ public class ProductDto {
         private String description;
         private BigDecimal price;
         private Integer quantity;
-        private String category;
+        private CategoryDto category;
+        private String imageUrl;
+        private String specifications;
+        private Double rating;
+        private Integer reviewCount;
         private String status;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DetailResponse {
+        private Long id;
+        private String name;
+        private String description;
+        private BigDecimal price;
+        private Integer quantity;
+        private CategoryDto category;
+        private String imageUrl;
+        private String specifications;
+        private Double rating;
+        private Integer reviewCount;
+        private String status;
+        private List<ReviewDto> reviews;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }

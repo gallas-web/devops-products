@@ -20,7 +20,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
-import { CATEGORIES, PageResponse, Product, ProductFilter, ProductRequest, STATUSES } from '../../../core/models/product.model';
+import { Category, PageResponse, Product, ProductFilter, ProductRequest, STATUSES } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/services/product.service';
 import { ProductFormComponent } from '../components/product-form/product-form.component';
 import { ActiveCountPipe, LowStockCountPipe } from '../../../shared/pipes/product.pipes';
@@ -46,7 +46,7 @@ export class ProductsPageComponent implements OnInit {
   };
 
   filter: ProductFilter = { page: 0, size: 10, sortBy: 'createdAt', sortDir: 'desc' };
-  categories = CATEGORIES;
+  categories: Category[] = [];
   statuses = STATUSES;
 
   formVisible = false;
@@ -62,6 +62,7 @@ export class ProductsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.productService.getCategories().subscribe(categories => this.categories = categories);
     this.loadProducts();
     this.searchSubject.pipe(debounceTime(400)).subscribe(() => {
       this.filter.page = 0;

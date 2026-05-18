@@ -1,0 +1,305 @@
+<!-- eslint-disable @angular-eslint/template/prefer-control-flow -->
+<div class="shop-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="NovaShop accueil">
+      <span class="brand-mark" nz-icon nzType="shop"></span>
+      <span>
+        <strong>NovaShop</strong>
+        <small>Tech marketplace</small>
+      </span>
+    </a>
+
+    <nav class="nav-links" aria-label="Navigation principale">
+      <button type="button" [class.active]="selectedTab === 0" (click)="selectedTab = 0">Boutique</button>
+      <button type="button" [class.active]="selectedTab === 1" (click)="selectedTab = 1">
+        Panier <span>{{ cartCount }}</span>
+      </button>
+      <button type="button" [class.active]="selectedTab === 2" (click)="selectedTab = 2">Commandes</button>
+      <a routerLink="/admin/products">Admin</a>
+    </nav>
+
+    <div class="account">
+      <ng-container *ngIf="user; else visitor">
+        <span class="avatar">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</span>
+        <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+        <button nz-button nzType="default" (click)="logout()">
+          <span nz-icon nzType="logout"></span>
+          Déconnexion
+        </button>
+      </ng-container>
+      <ng-template #visitor>
+        <button nz-button nzType="default" (click)="openAuth('login')">Connexion</button>
+        <button nz-button nzType="primary" (click)="openAuth('register')">Créer un compte</button>
+      </ng-template>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Livraison rapide · Paiement sécurisé · Retours simples</span>
+        <h1>Le meilleur de la tech, prêt à commander.</h1>
+        <p>Découvrez une sélection premium de smartphones, laptops, audio, gaming et accessoires avec stock en temps réel.</p>
+        <div class="hero-actions">
+          <button nz-button nzType="primary" nzSize="large" (click)="selectedTab = 0">
+            <span nz-icon nzType="shopping"></span>
+            Explorer
+          </button>
+          <button nz-button nzSize="large" (click)="selectedTab = 1">
+            <span nz-icon nzType="shopping-cart"></span>
+            Voir le panier
+          </button>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80" alt="Produits tech sur un bureau" />
+        <div class="hero-card">
+          <span nz-icon nzType="safety-certificate"></span>
+          <strong>Garantie 24 mois</strong>
+          <small>Sur les produits éligibles</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="commerce-metrics" aria-label="Indicateurs boutique">
+      <div>
+        <span nz-icon nzType="database"></span>
+        <strong>{{ products.totalElements }}</strong>
+        <small>produits disponibles</small>
+      </div>
+      <div>
+        <span nz-icon nzType="shopping-cart"></span>
+        <strong>{{ cartCount }}</strong>
+        <small>articles au panier</small>
+      </div>
+      <div>
+        <span nz-icon nzType="gift"></span>
+        <strong>{{ orders.length }}</strong>
+        <small>commandes suivies</small>
+      </div>
+    </section>
+
+    <nz-tabset class="commerce-tabs" [(nzSelectedIndex)]="selectedTab">
+      <nz-tab nzTitle="Boutique">
+        <section class="catalog-panel">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">Catalogue</span>
+              <h2>{{ activeCategoryName }}</h2>
+            </div>
+            <p>{{ products.totalElements }} produit(s) trouvé(s)</p>
+          </div>
+
+          <div class="category-strip">
+            <button type="button" class="category-pill" [class.active]="!filter.categoryId" (click)="selectCategory()">
+              <span nz-icon nzType="appstore"></span>
+              Tous
+            </button>
+            <button
+              type="button"
+              class="category-pill"
+              *ngFor="let category of categories"
+              [class.active]="filter.categoryId === category.id"
+              (click)="selectCategory(category.id)">
+              <span nz-icon [nzType]="getCategoryIcon(category)"></span>
+              {{ category.name }}
+            </button>
+          </div>
+
+          <div class="filters">
+            <nz-input-group [nzPrefix]="searchIcon" class="search-field">
+              <input nz-input placeholder="Rechercher un produit, une marque..." [ngModel]="filter.search" (ngModelChange)="onSearch($event)" />
+            </nz-input-group>
+            <ng-template #searchIcon><span nz-icon nzType="search"></span></ng-template>
+            <nz-select nzAllowClear nzPlaceHolder="Catégorie" [ngModel]="filter.categoryId" (ngModelChange)="onCategoryChange($event)">
+              <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
+            </nz-select>
+          </div>
+
+          <nz-spin [nzSpinning]="loadingProducts">
+            <div class="product-grid" *ngIf="products.content.length; else emptyProducts">
+              <article class="product-card" *ngFor="let product of products.content">
+                <div class="product-image">
+                  <img [src]="product.imageUrl || 'https://via.placeholder.com/600x420?text=NovaShop'" [alt]="product.name" />
+                  <span class="stock-badge" [class.low]="product.quantity > 0 && product.quantity < 10" [class.out]="product.quantity === 0">
+                    {{ getStockLabel(product) }}
+                  </span>
+                </div>
+                <div class="product-body">
+                  <div class="product-meta">
+                    <span>{{ product.category.name }}</span>
+                    <span>{{ product.reviewCount || 0 }} avis</span>
+                  </div>
+                  <h3>{{ product.name }}</h3>
+                  <p>{{ product.description }}</p>
+                  <div class="rating-row">
+                    <nz-rate [ngModel]="product.rating || 0" nzDisabled></nz-rate>
+                    <small>{{ product.rating || 0 }}/5</small>
+                  </div>
+                  <div class="product-footer">
+                    <div>
+                      <small>Prix TTC</small>
+                      <strong>{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong>
+                    </div>
+                    <button nz-button nzType="primary" [disabled]="product.quantity === 0" (click)="addProduct(product)">
+                      <span nz-icon nzType="shopping-cart"></span>
+                      Ajouter
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <ng-template #emptyProducts>
+              <nz-empty nzNotFoundContent="Aucun produit disponible"></nz-empty>
+            </ng-template>
+          </nz-spin>
+
+          <div class="pager" *ngIf="products.totalPages > 1">
+            <button nz-button [disabled]="(filter.page ?? 0) === 0" (click)="previousPage()">
+              <span nz-icon nzType="left"></span>
+              Précédent
+            </button>
+            <span>Page {{ (filter.page ?? 0) + 1 }} / {{ products.totalPages }}</span>
+            <button nz-button [disabled]="products.last" (click)="nextPage()">
+              Suivant
+              <span nz-icon nzType="right"></span>
+            </button>
+          </div>
+        </section>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="cartTitle">
+        <ng-template #cartTitle>
+          <nz-badge [nzCount]="cartCount" [nzOffset]="[12, 0]">Panier</nz-badge>
+        </ng-template>
+        <section class="cart-layout" *ngIf="user; else mustLogin">
+          <div class="cart-items">
+            <div class="section-heading compact">
+              <div>
+                <span class="eyebrow">Votre sélection</span>
+                <h2>Panier</h2>
+              </div>
+              <p>{{ cartCount }} article(s)</p>
+            </div>
+
+            <nz-table [nzData]="cart?.items || []" [nzFrontPagination]="false" [nzLoading]="loadingCart">
+              <thead>
+                <tr>
+                  <th>Produit</th>
+                  <th nzWidth="140px">Quantité</th>
+                  <th nzWidth="130px" nzAlign="right">Total</th>
+                  <th nzWidth="64px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of cart?.items">
+                  <td>
+                    <div class="cart-product">
+                      <img [src]="item.imageUrl || 'https://via.placeholder.com/80'" [alt]="item.productName" />
+                      <span>{{ item.productName }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <nz-input-number [ngModel]="item.quantity" [nzMin]="0" [nzStep]="1" (ngModelChange)="updateQuantity(item.id, $event)"></nz-input-number>
+                  </td>
+                  <td nzAlign="right"><strong>{{ item.totalPrice | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong></td>
+                  <td>
+                    <button nz-button nzDanger nzType="text" (click)="removeItem(item.id)" aria-label="Supprimer l'article">
+                      <span nz-icon nzType="delete"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+
+          <aside class="checkout-card">
+            <span class="eyebrow">Paiement</span>
+            <h2>Résumé</h2>
+            <div class="summary-line">
+              <span>Sous-total</span>
+              <strong>{{ cart?.totalPrice || 0 | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong>
+            </div>
+            <div class="summary-line muted">
+              <span>Livraison</span>
+              <strong>Calculée à la commande</strong>
+            </div>
+            <div class="checkout-form">
+              <input nz-input placeholder="Adresse" [(ngModel)]="checkout.shippingAddress" />
+              <input nz-input placeholder="Ville" [(ngModel)]="checkout.shippingCity" />
+              <input nz-input placeholder="Code postal" [(ngModel)]="checkout.shippingZipCode" />
+              <input nz-input placeholder="Pays" [(ngModel)]="checkout.shippingCountry" />
+            </div>
+            <button nz-button nzType="primary" nzSize="large" nzBlock [disabled]="!checkoutReady" (click)="createOrder()">
+              Confirmer la commande
+            </button>
+          </aside>
+        </section>
+      </nz-tab>
+
+      <nz-tab nzTitle="Commandes">
+        <section class="orders-panel" *ngIf="user; else mustLogin">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">Historique</span>
+              <h2>Mes commandes</h2>
+            </div>
+            <p>{{ orders.length }} commande(s)</p>
+          </div>
+
+          <article *ngFor="let order of orders" class="order-card">
+            <div class="order-head">
+              <div>
+                <strong>{{ order.orderNumber }}</strong>
+                <p>{{ order.createdAt | date:'medium' }}</p>
+              </div>
+              <nz-tag>{{ getOrderStatusLabel(order.status) }}</nz-tag>
+            </div>
+            <div class="order-foot">
+              <span>{{ order.items.length }} article(s)</span>
+              <strong>{{ order.totalPrice | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong>
+            </div>
+          </article>
+
+          <nz-empty *ngIf="!orders.length" nzNotFoundContent="Aucune commande pour le moment"></nz-empty>
+        </section>
+      </nz-tab>
+    </nz-tabset>
+  </main>
+</div>
+
+<ng-template #mustLogin>
+  <div class="login-empty">
+    <nz-empty nzNotFoundContent="Connectez-vous pour accéder à cet espace">
+      <button nz-button nzType="primary" (click)="openAuth('login')">Connexion</button>
+    </nz-empty>
+  </div>
+</ng-template>
+
+<nz-modal
+  [nzVisible]="authVisible"
+  [nzTitle]="authMode === 'login' ? 'Connexion' : 'Créer un compte'"
+  [nzFooter]="null"
+  (nzOnCancel)="authVisible = false">
+  <ng-container *nzModalContent>
+    <form class="auth-form" (ngSubmit)="submitAuth()">
+      <ng-container *ngIf="authMode === 'register'">
+        <input nz-input placeholder="Prénom" [(ngModel)]="registerForm.firstName" name="firstName" required />
+        <input nz-input placeholder="Nom" [(ngModel)]="registerForm.lastName" name="lastName" required />
+      </ng-container>
+      <ng-container *ngIf="authMode === 'login'; else registerCredentials">
+        <input nz-input placeholder="Email" [(ngModel)]="loginForm.email" name="loginEmail" required />
+        <input nz-input type="password" placeholder="Mot de passe" [(ngModel)]="loginForm.password" name="loginPassword" required />
+      </ng-container>
+      <ng-template #registerCredentials>
+        <input nz-input placeholder="Email" [(ngModel)]="registerForm.email" name="registerEmail" required />
+        <input nz-input type="password" placeholder="Mot de passe" [(ngModel)]="registerForm.password" name="registerPassword" required />
+        <input nz-input type="password" placeholder="Confirmer le mot de passe" [(ngModel)]="registerForm.confirmPassword" name="confirmPassword" required />
+      </ng-template>
+      <button nz-button nzType="primary" nzBlock type="submit">{{ authMode === 'login' ? 'Se connecter' : 'Créer mon compte' }}</button>
+      <button nz-button nzType="link" type="button" (click)="authMode = authMode === 'login' ? 'register' : 'login'">
+        {{ authMode === 'login' ? 'Créer un compte' : 'J’ai déjà un compte' }}
+      </button>
+    </form>
+  </ng-container>
+</nz-modal>

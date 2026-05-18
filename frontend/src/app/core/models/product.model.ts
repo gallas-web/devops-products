@@ -1,13 +1,43 @@
+export interface Category {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Review {
+  id: number;
+  productId: number;
+  userId: number;
+  userName: string;
+  rating: number;
+  title: string;
+  comment: string;
+  verified: boolean;
+  createdAt: string;
+}
+
 export interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   quantity: number;
-  category: string;
+  category: Category;
+  imageUrl: string;
+  specifications: string;
+  rating: number;
+  reviewCount: number;
   status: 'ACTIVE' | 'INACTIVE';
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ProductDetail extends Product {
+  reviews: Review[];
 }
 
 export interface ProductRequest {
@@ -15,7 +45,9 @@ export interface ProductRequest {
   description: string;
   price: number;
   quantity: number;
-  category: string;
+  categoryId: number;
+  imageUrl: string;
+  specifications: string;
   status: string;
 }
 
@@ -37,7 +69,7 @@ export interface PageResponse<T> {
 
 export interface ProductFilter {
   search?: string;
-  category?: string;
+  categoryId?: number;
   status?: string;
   page?: number;
   size?: number;
@@ -45,14 +77,18 @@ export interface ProductFilter {
   sortDir?: string;
 }
 
+export interface CreateReviewRequest {
+  rating: number;
+  title: string;
+  comment?: string;
+}
+
 export const CATEGORIES = [
   'Informatique',
   'Téléphonie',
   'Audio',
   'TV & Vidéo',
-  'Électroménager',
-  'Gaming',
-  'Photo & Vidéo',
+  'Jeux Vidéo',
   'Accessoires'
 ];
 

@@ -51,12 +51,12 @@
       <ng-template #prefixSearch><span nz-icon nzType="search"></span></ng-template>
 
       <nz-select
-        [(ngModel)]="filter.category"
+        [(ngModel)]="filter.categoryId"
         nzPlaceHolder="Catégorie"
         nzAllowClear
         (ngModelChange)="onFilterChange()"
         class="filter-select">
-        <nz-option *ngFor="let cat of categories" [nzValue]="cat" [nzLabel]="cat"></nz-option>
+        <nz-option *ngFor="let cat of categories" [nzValue]="cat.id" [nzLabel]="cat.name"></nz-option>
       </nz-select>
 
       <nz-select
@@ -125,7 +125,7 @@
             </nz-tag>
           </td>
           <td>
-            <nz-tag>{{ product.category }}</nz-tag>
+            <nz-tag>{{ product.category.name }}</nz-tag>
           </td>
           <td nzAlign="center">
             <nz-badge

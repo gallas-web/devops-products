@@ -8,7 +8,12 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor(private message: NzMessageService) {}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler) {
-    return next.handle(req).pipe(
+    const token = localStorage.getItem('ecommerce_token');
+    const authReq = token
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
+
+    return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         let msg = 'Une erreur est survenue';
         if (error.error?.message) msg = error.error.message;

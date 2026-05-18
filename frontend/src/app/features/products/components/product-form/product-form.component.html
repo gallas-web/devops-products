@@ -47,8 +47,8 @@
           <nz-form-item>
             <nz-form-label nzRequired>Catégorie</nz-form-label>
             <nz-form-control nzErrorTip="La catégorie est obligatoire">
-              <nz-select formControlName="category" nzPlaceHolder="Choisir une catégorie">
-                <nz-option *ngFor="let cat of categories" [nzValue]="cat" [nzLabel]="cat"></nz-option>
+              <nz-select formControlName="categoryId" nzPlaceHolder="Choisir une catégorie">
+                <nz-option *ngFor="let cat of categories" [nzValue]="cat.id" [nzLabel]="cat.name"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -62,6 +62,20 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <nz-form-item>
+          <nz-form-label>Image URL</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="imageUrl" placeholder="https://..." />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Spécifications</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input formControlName="specifications" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+          </nz-form-control>
+        </nz-form-item>
 
         <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #f0f0f0">
           <button nz-button nzType="default" type="button" (click)="onCancel()">Annuler</button>

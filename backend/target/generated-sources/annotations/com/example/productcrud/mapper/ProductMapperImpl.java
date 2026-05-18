@@ -1,14 +1,16 @@
 package com.example.productcrud.mapper;
 
+import com.example.productcrud.dto.CategoryDto;
 import com.example.productcrud.dto.ProductDto;
+import com.example.productcrud.entity.Category;
 import com.example.productcrud.entity.Product;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-18T11:22:03+0000",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-05-18T16:07:13+0000",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.18 (Ubuntu)"
 )
 @Component
 public class ProductMapperImpl implements ProductMapper {
@@ -21,14 +23,18 @@ public class ProductMapperImpl implements ProductMapper {
 
         ProductDto.Response.ResponseBuilder response = ProductDto.Response.builder();
 
-        response.category( product.getCategory() );
-        response.createdAt( product.getCreatedAt() );
-        response.description( product.getDescription() );
         response.id( product.getId() );
         response.name( product.getName() );
+        response.description( product.getDescription() );
         response.price( product.getPrice() );
         response.quantity( product.getQuantity() );
+        response.category( categoryToCategoryDto( product.getCategory() ) );
+        response.imageUrl( product.getImageUrl() );
+        response.specifications( product.getSpecifications() );
+        response.rating( product.getRating() );
+        response.reviewCount( product.getReviewCount() );
         response.status( product.getStatus() );
+        response.createdAt( product.getCreatedAt() );
         response.updatedAt( product.getUpdatedAt() );
 
         return response.build();
@@ -42,11 +48,12 @@ public class ProductMapperImpl implements ProductMapper {
 
         Product.ProductBuilder product = Product.builder();
 
-        product.category( request.getCategory() );
-        product.description( request.getDescription() );
         product.name( request.getName() );
+        product.description( request.getDescription() );
         product.price( request.getPrice() );
         product.quantity( request.getQuantity() );
+        product.imageUrl( request.getImageUrl() );
+        product.specifications( request.getSpecifications() );
         product.status( request.getStatus() );
 
         return product.build();
@@ -58,14 +65,11 @@ public class ProductMapperImpl implements ProductMapper {
             return;
         }
 
-        if ( request.getCategory() != null ) {
-            product.setCategory( request.getCategory() );
+        if ( request.getName() != null ) {
+            product.setName( request.getName() );
         }
         if ( request.getDescription() != null ) {
             product.setDescription( request.getDescription() );
-        }
-        if ( request.getName() != null ) {
-            product.setName( request.getName() );
         }
         if ( request.getPrice() != null ) {
             product.setPrice( request.getPrice() );
@@ -73,8 +77,32 @@ public class ProductMapperImpl implements ProductMapper {
         if ( request.getQuantity() != null ) {
             product.setQuantity( request.getQuantity() );
         }
+        if ( request.getImageUrl() != null ) {
+            product.setImageUrl( request.getImageUrl() );
+        }
+        if ( request.getSpecifications() != null ) {
+            product.setSpecifications( request.getSpecifications() );
+        }
         if ( request.getStatus() != null ) {
             product.setStatus( request.getStatus() );
         }
+    }
+
+    protected CategoryDto categoryToCategoryDto(Category category) {
+        if ( category == null ) {
+            return null;
+        }
+
+        CategoryDto.CategoryDtoBuilder categoryDto = CategoryDto.builder();
+
+        categoryDto.id( category.getId() );
+        categoryDto.name( category.getName() );
+        categoryDto.description( category.getDescription() );
+        categoryDto.icon( category.getIcon() );
+        categoryDto.active( category.getActive() );
+        categoryDto.createdAt( category.getCreatedAt() );
+        categoryDto.updatedAt( category.getUpdatedAt() );
+
+        return categoryDto.build();
     }
 }

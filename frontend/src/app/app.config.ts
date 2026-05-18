@@ -5,6 +5,31 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
 import { NZ_I18N, fr_FR } from 'ng-zorro-antd/i18n';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import {
+  AppstoreOutline,
+  CheckCircleOutline,
+  ClearOutline,
+  CustomerServiceOutline,
+  DatabaseOutline,
+  DeleteOutline,
+  EditOutline,
+  GiftOutline,
+  LeftOutline,
+  LogoutOutline,
+  MobileOutline,
+  PlaySquareOutline,
+  PlusOutline,
+  RightOutline,
+  SafetyCertificateOutline,
+  SearchOutline,
+  ShopOutline,
+  ShoppingCartOutline,
+  ShoppingOutline,
+  ThunderboltOutline,
+  UsbOutline,
+  WarningOutline
+} from '@ant-design/icons-angular/icons';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { FormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
@@ -14,6 +39,31 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 
 registerLocaleData(fr);
 
+const icons = [
+  AppstoreOutline,
+  CheckCircleOutline,
+  ClearOutline,
+  CustomerServiceOutline,
+  DatabaseOutline,
+  DeleteOutline,
+  EditOutline,
+  GiftOutline,
+  LeftOutline,
+  LogoutOutline,
+  MobileOutline,
+  PlaySquareOutline,
+  PlusOutline,
+  RightOutline,
+  SafetyCertificateOutline,
+  SearchOutline,
+  ShopOutline,
+  ShoppingCartOutline,
+  ShoppingOutline,
+  ThunderboltOutline,
+  UsbOutline,
+  WarningOutline
+];
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -21,6 +71,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     importProvidersFrom(NzMessageModule, FormsModule),
     { provide: NZ_I18N, useValue: fr_FR },
+    { provide: NZ_ICONS, useValue: icons },
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ]

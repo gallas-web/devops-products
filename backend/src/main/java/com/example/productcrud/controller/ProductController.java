@@ -34,7 +34,7 @@ public class ProductController {
     @Operation(summary = "Lister les produits avec pagination et filtres")
     public ResponseEntity<ApiResponse<ProductDto.PageResponse>> findAll(
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -55,7 +55,7 @@ public class ProductController {
 
         Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         PageRequest pageable = PageRequest.of(page, size, sort);
-        ProductDto.PageResponse result = productService.findAll(search, category, status, pageable);
+        ProductDto.PageResponse result = productService.findAll(search, categoryId, status, pageable);
         return ResponseEntity.ok(ApiResponse.success(result, "Produits récupérés avec succès"));
     }
 
