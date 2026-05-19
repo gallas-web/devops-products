@@ -96,4 +96,11 @@ export class ProductService {
     return this.http.delete<ApiResponse<void>>(`${this.REVIEWS_URL}/${reviewId}`)
       .pipe(map(() => void 0));
   }
+
+  // Images
+  uploadImage(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ url: string }>('/api/v1/images/upload', formData);
+  }
 }

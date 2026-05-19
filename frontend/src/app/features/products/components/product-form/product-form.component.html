@@ -64,9 +64,52 @@
         </div>
 
         <nz-form-item>
-          <nz-form-label>Image URL</nz-form-label>
+          <nz-form-label>Image du produit</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="imageUrl" placeholder="https://..." />
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <!-- Image Preview -->
+              <div *ngIf="imagePreview" style="position: relative; width: 100%; max-width: 200px">
+                <img [src]="imagePreview" 
+                     style="width: 100%; height: 200px; object-fit: cover; border: 1px solid #d9d9d9; border-radius: 4px"
+                     alt="Aperçu de l'image" />
+                <button 
+                  nz-button
+                  nzType="text"
+                  nzDanger
+                  style="position: absolute; top: 4px; right: 4px; padding: 4px"
+                  type="button"
+                  (click)="removeImage()"
+                  nzSize="small">
+                  ✕
+                </button>
+              </div>
+
+              <!-- File Input -->
+              <div style="display: flex; align-items: center; gap: 8px">
+                <input 
+                  type="file"
+                  #fileInput
+                  style="display: none"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  (change)="onImageSelected($event)" />
+                <button 
+                  nz-button
+                  type="button"
+                  (click)="fileInput.click()"
+                  [disabled]="uploadingImage">
+                  {{ uploadingImage ? '⏳ Téléchargement...' : '📁 Sélectionner une image' }}
+                </button>
+                <span *ngIf="imagePreview && form.get('imageUrl')?.value" style="color: #52c41a; font-size: 12px">
+                  ✓ Image téléchargée
+                </span>
+              </div>
+
+              <!-- Or manual URL -->
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px">
+                <span style="color: #999; font-size: 12px">Ou entrez une URL:</span>
+              </div>
+              <input nz-input formControlName="imageUrl" placeholder="https://..." />
+            </div>
           </nz-form-control>
         </nz-form-item>
 
