@@ -93,8 +93,8 @@ public class AdminServiceImpl implements AdminService {
                 .orderNumber(order.getOrderNumber())
                 .userId(order.getUser().getId())
                 .totalPrice(order.getTotalPrice())
-                .status(order.getStatus())
-                .paymentStatus(order.getPaymentStatus())
+                .status(order.getStatus().toString())
+                .paymentStatus(order.getPaymentStatus().toString())
                 .createdAt(order.getCreatedAt())
                 .build());
     }
@@ -148,7 +148,14 @@ public class AdminServiceImpl implements AdminService {
     public AdminOrderDto updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Commande non trouvée"));
-        order.setStatus(status);
+
+        try {
+            Order.OrderStatus newStatus = Order.OrderStatus.valueOf(status);
+            order.setStatus(newStatus);
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException("Statut de commande invalide: " + status);
+        }
+
         orderRepository.save(order);
 
         return AdminOrderDto.builder()
@@ -156,8 +163,8 @@ public class AdminServiceImpl implements AdminService {
                 .orderNumber(order.getOrderNumber())
                 .userId(order.getUser().getId())
                 .totalPrice(order.getTotalPrice())
-                .status(order.getStatus())
-                .paymentStatus(order.getPaymentStatus())
+                .status(order.getStatus().toString())
+                .paymentStatus(order.getPaymentStatus().toString())
                 .createdAt(order.getCreatedAt())
                 .build();
     }
