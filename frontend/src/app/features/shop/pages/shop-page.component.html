@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="hero-media">
-        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80" alt="Produits tech sur un bureau" />
+        <img src="https://picsum.photos/900/500?random=1" alt="Produits tech sur un bureau" />
         <div class="hero-card">
           <span nz-icon nzType="safety-certificate"></span>
           <strong>Garantie 24 mois</strong>
@@ -118,9 +118,9 @@
 
           <nz-spin [nzSpinning]="loadingProducts">
             <div class="product-grid" *ngIf="products.content.length; else emptyProducts">
-              <article class="product-card" *ngFor="let product of products.content">
+              <article class="product-card" *ngFor="let product of products.content" (click)="viewProductDetail(product.id)" style="cursor: pointer;">
                 <div class="product-image">
-                  <img [src]="product.imageUrl || 'https://via.placeholder.com/600x420?text=NovaShop'" [alt]="product.name" />
+                  <img [src]="product.imageUrl || 'https://dummyimage.com/600x420/cccccc/969696?text=' + (product.name | slice:0:20)" [alt]="product.name" />
                   <span class="stock-badge" [class.low]="product.quantity > 0 && product.quantity < 10" [class.out]="product.quantity === 0">
                     {{ getStockLabel(product) }}
                   </span>
@@ -139,7 +139,7 @@
                   <div class="product-footer">
                     <div>
                       <small>Prix TTC</small>
-                      <strong>{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong>
+{{ product.price | fcfa }}
                     </div>
                     <button nz-button nzType="primary" [disabled]="product.quantity === 0" (click)="addProduct(product)">
                       <span nz-icon nzType="shopping-cart"></span>
@@ -195,14 +195,14 @@
                 <tr *ngFor="let item of cart?.items">
                   <td>
                     <div class="cart-product">
-                      <img [src]="item.imageUrl || 'https://via.placeholder.com/80'" [alt]="item.productName" />
+                      <img [src]="item.imageUrl || 'https://dummyimage.com/80x80/cccccc/969696?text=Product'" [alt]="item.productName" />
                       <span>{{ item.productName }}</span>
                     </div>
                   </td>
                   <td>
                     <nz-input-number [ngModel]="item.quantity" [nzMin]="0" [nzStep]="1" (ngModelChange)="updateQuantity(item.id, $event)"></nz-input-number>
                   </td>
-                  <td nzAlign="right"><strong>{{ item.totalPrice | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong></td>
+{{ item.totalPrice | fcfa }}
                   <td>
                     <button nz-button nzDanger nzType="text" (click)="removeItem(item.id)" aria-label="Supprimer l'article">
                       <span nz-icon nzType="delete"></span>
@@ -218,7 +218,7 @@
             <h2>Résumé</h2>
             <div class="summary-line">
               <span>Sous-total</span>
-              <strong>{{ cart?.totalPrice || 0 | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong>
+{{ cart?.totalPrice || 0 | fcfa }}
             </div>
             <div class="summary-line muted">
               <span>Livraison</span>
@@ -257,7 +257,7 @@
             </div>
             <div class="order-foot">
               <span>{{ order.items.length }} article(s)</span>
-              <strong>{{ order.totalPrice | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</strong>
+{{ order.totalPrice | fcfa }}
             </div>
           </article>
 

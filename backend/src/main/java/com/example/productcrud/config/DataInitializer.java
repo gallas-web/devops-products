@@ -22,195 +22,168 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initData(ProductRepository productRepo, CategoryRepository categoryRepo) {
         return args -> {
-            // Initialiser les catégories
+
             if (categoryRepo.count() == 0) {
                 List<Category> categories = List.of(
-                        Category.builder()
-                                .name("Informatique")
-                                .description("Ordinateurs portables, ordinateurs de bureau, et accessoires informatiques")
-                                .icon("laptop")
-                                .active(true)
-                                .createdAt(LocalDateTime.now())
-                                .build(),
-                        Category.builder()
-                                .name("Téléphonie")
-                                .description("Smartphones, téléphones, et accessoires de téléphonie")
-                                .icon("phone")
-                                .active(true)
-                                .createdAt(LocalDateTime.now())
-                                .build(),
-                        Category.builder()
-                                .name("Audio")
-                                .description("Casques, écouteurs, et systèmes audio")
-                                .icon("headphones")
-                                .active(true)
-                                .createdAt(LocalDateTime.now())
-                                .build(),
-                        Category.builder()
-                                .name("TV & Vidéo")
-                                .description("Téléviseurs, écrans, et équipements vidéo")
-                                .icon("video")
-                                .active(true)
-                                .createdAt(LocalDateTime.now())
-                                .build(),
-                        Category.builder()
-                                .name("Jeux Vidéo")
-                                .description("Consoles de jeux, jeux vidéo, et accessoires de gaming")
-                                .icon("game")
-                                .active(true)
-                                .createdAt(LocalDateTime.now())
-                                .build(),
-                        Category.builder()
-                                .name("Accessoires")
-                                .description("Câbles, adaptateurs, étuis, et autres accessoires")
-                                .icon("plug")
-                                .active(true)
-                                .createdAt(LocalDateTime.now())
-                                .build()
+                        Category.builder().name("Informatique").description("Ordinateurs et accessoires").icon("laptop").active(true).createdAt(LocalDateTime.now()).build(),
+                        Category.builder().name("Téléphonie").description("Smartphones et accessoires").icon("phone").active(true).createdAt(LocalDateTime.now()).build(),
+                        Category.builder().name("Audio").description("Casques et écouteurs").icon("headphones").active(true).createdAt(LocalDateTime.now()).build(),
+                        Category.builder().name("TV & Vidéo").description("Téléviseurs et écrans").icon("video").active(true).createdAt(LocalDateTime.now()).build(),
+                        Category.builder().name("Jeux Vidéo").description("Consoles et gaming").icon("game").active(true).createdAt(LocalDateTime.now()).build()
                 );
                 categoryRepo.saveAll(categories);
             }
 
-            // Initialiser les produits
             if (productRepo.count() == 0) {
+
                 Map<String, Category> categoriesMap = new HashMap<>();
                 categoryRepo.findAll().forEach(cat -> categoriesMap.put(cat.getName(), cat));
 
                 List<Product> products = List.of(
+
                         Product.builder()
                                 .name("MacBook Pro M3")
-                                .description("Ordinateur portable Apple 14 pouces avec puce M3, 8GB RAM, 512GB SSD. Parfait pour les professionnels.")
+                                .description("Le MacBook Pro M3 est un ordinateur portable haut de gamme conçu pour les professionnels. Grâce à sa puce Apple M3 ultra performante, il offre une rapidité exceptionnelle pour le développement, le design et le montage vidéo. Son écran Retina garantit une qualité d’image incroyable et une autonomie longue durée.")
                                 .price(new BigDecimal("2499.99"))
                                 .quantity(15)
                                 .category(categoriesMap.get("Informatique"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=MacBook+Pro+M3")
-                                .specifications("14 pouces Retina, M3, 8GB, 512GB, GPU 8-core")
+                                .imageUrl("https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400")
+                                .specifications("14 pouces Retina, M3, 8GB RAM, 512GB SSD")
                                 .status("ACTIVE")
                                 .rating(4.5)
                                 .reviewCount(28)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("iPhone 15 Pro")
-                                .description("Smartphone Apple dernière génération avec caméra de 48MP, processeur A17 Pro, écran Super Retina XDR.")
+                                .description("L’iPhone 15 Pro est un smartphone premium avec des performances exceptionnelles grâce à la puce A17 Pro. Il dispose d’un appareil photo 48 MP pour des photos professionnelles, d’un écran Super Retina XDR et d’un design élégant en titane.")
                                 .price(new BigDecimal("1199.99"))
                                 .quantity(42)
                                 .category(categoriesMap.get("Téléphonie"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=iPhone+15+Pro")
-                                .specifications("6.1 pouces, A17 Pro, 128GB, 48MP Camera")
+                                .imageUrl("https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400")
+                                .specifications("6.1 pouces, A17 Pro, 128GB")
                                 .status("ACTIVE")
                                 .rating(4.7)
                                 .reviewCount(156)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("Samsung Galaxy S24")
-                                .description("Smartphone Android premium avec processeur Snapdragon 8 Gen 3, caméra 200MP, écran AMOLED.")
+                                .description("Le Samsung Galaxy S24 est un smartphone Android puissant avec un écran AMOLED lumineux et un appareil photo haute résolution. Idéal pour les utilisateurs exigeants, il combine performance, autonomie et design moderne.")
                                 .price(new BigDecimal("899.99"))
                                 .quantity(30)
                                 .category(categoriesMap.get("Téléphonie"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=Samsung+Galaxy+S24")
-                                .specifications("6.2 pouces AMOLED, Snapdragon 8 Gen 3, 256GB, 200MP")
+                                .imageUrl("https://images.unsplash.com/photo-1705585173299-3d7c8c0c6d9e?w=400")
+                                .specifications("6.2 pouces AMOLED, 256GB")
                                 .status("ACTIVE")
                                 .rating(4.6)
                                 .reviewCount(89)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("Sony WH-1000XM5")
-                                .description("Casque audio premium avec réduction de bruit active, autonomie 30 heures, connexion multi-appareils.")
+                                .description("Le casque Sony WH-1000XM5 offre une expérience audio immersive avec une réduction de bruit active parmi les meilleures du marché. Idéal pour les voyages, le travail ou la musique, avec une autonomie allant jusqu’à 30 heures.")
                                 .price(new BigDecimal("379.99"))
                                 .quantity(58)
                                 .category(categoriesMap.get("Audio"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=Sony+WH-1000XM5")
-                                .specifications("Réduction bruit, 30h autonomie, Bluetooth 5.3")
+                                .imageUrl("https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400")
+                                .specifications("Réduction de bruit, Bluetooth, 30h autonomie")
                                 .status("ACTIVE")
                                 .rating(4.8)
                                 .reviewCount(342)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("iPad Air")
-                                .description("Tablette Apple puissante avec puce M1, écran Liquid Retina, compatible Apple Pencil.")
+                                .description("L’iPad Air est une tablette puissante et légère équipée de la puce M1. Parfaite pour le travail, les études ou le divertissement, elle offre une fluidité exceptionnelle et une compatibilité avec l’Apple Pencil.")
                                 .price(new BigDecimal("699.99"))
                                 .quantity(22)
                                 .category(categoriesMap.get("Informatique"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=iPad+Air")
-                                .specifications("10.9 pouces Liquid Retina, M1, 64GB, iPadOS 17")
+                                .imageUrl("https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400")
+                                .specifications("10.9 pouces, M1, 64GB")
                                 .status("ACTIVE")
                                 .rating(4.5)
                                 .reviewCount(67)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("AirPods Pro 2")
-                                .description("Écouteurs sans fil avec réduction de bruit active, isolement adaptatif, son spatial.")
+                                .description("Les AirPods Pro 2 offrent un son de haute qualité avec réduction de bruit active et mode transparence. Ils sont parfaits pour les appels, la musique et les déplacements grâce à leur confort et leur autonomie.")
                                 .price(new BigDecimal("279.99"))
                                 .quantity(75)
                                 .category(categoriesMap.get("Audio"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=AirPods+Pro+2")
-                                .specifications("Réduction bruit, Son spatial, 6h autonomie")
+                                .imageUrl("https://images.unsplash.com/photo-1606220838315-056192d5e927?w=400")
+                                .specifications("Son spatial, réduction de bruit")
                                 .status("ACTIVE")
                                 .rating(4.7)
                                 .reviewCount(512)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("Dell XPS 15")
-                                .description("Laptop professionnel haute performance avec écran 4K OLED, Intel i9, RTX 4070.")
+                                .description("Le Dell XPS 15 est un ordinateur portable haut de gamme avec un écran OLED 4K impressionnant. Idéal pour les développeurs et créatifs, il offre puissance, élégance et performance graphique.")
                                 .price(new BigDecimal("1899.99"))
                                 .quantity(8)
                                 .category(categoriesMap.get("Informatique"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=Dell+XPS+15")
-                                .specifications("15.6 OLED 4K, i9, RTX 4070, 32GB, 1TB SSD")
+                                .imageUrl("https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=400")
+                                .specifications("15.6 pouces, i9, 32GB RAM")
                                 .status("ACTIVE")
                                 .rating(4.6)
                                 .reviewCount(95)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
-                                .name("LG OLED 55''")
-                                .description("Télévision OLED 4K 55 pouces avec processeur IA, 144Hz, HDMI 2.1, gaming optimisé.")
+                                .name("LG OLED 55")
+                                .description("Téléviseur LG OLED 55 pouces avec une qualité d’image exceptionnelle, des noirs profonds et un contraste parfait. Idéal pour le cinéma à domicile et le gaming en 4K.")
                                 .price(new BigDecimal("1299.99"))
                                 .quantity(5)
                                 .category(categoriesMap.get("TV & Vidéo"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=LG+OLED+55")
-                                .specifications("55 pouces OLED 4K, 144Hz, IA Upscaling, HDMI 2.1")
+                                .imageUrl("https://images.unsplash.com/photo-1593784991095-a205069470b6?w=400")
+                                .specifications("OLED 4K, 144Hz")
                                 .status("ACTIVE")
                                 .rating(4.8)
                                 .reviewCount(234)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("PlayStation 5")
-                                .description("Console de jeu de nouvelle génération avec drive SSD ultra-rapide, ray tracing, 4K 120fps.")
+                                .description("La PlayStation 5 est une console de nouvelle génération offrant des graphismes en 4K, des temps de chargement ultra rapides et une immersion totale grâce au ray tracing.")
                                 .price(new BigDecimal("499.99"))
                                 .quantity(12)
                                 .category(categoriesMap.get("Jeux Vidéo"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=PlayStation+5")
-                                .specifications("Ryzen 8-core, RDNA 2, 825GB SSD, 4K 120fps")
+                                .imageUrl("https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400")
+                                .specifications("4K, SSD rapide")
                                 .status("ACTIVE")
                                 .rating(4.7)
                                 .reviewCount(287)
                                 .createdAt(LocalDateTime.now())
                                 .build(),
+
                         Product.builder()
                                 .name("Xbox Series X")
-                                .description("Console gaming puissante avec 12 TFLOPS, 1TB SSD, support 4K 120fps, Game Pass Ultimate.")
+                                .description("La Xbox Series X est une console puissante avec des performances exceptionnelles, idéale pour le gaming en 4K. Profitez d’une fluidité incroyable et du Game Pass pour accéder à des centaines de jeux.")
                                 .price(new BigDecimal("499.99"))
                                 .quantity(9)
                                 .category(categoriesMap.get("Jeux Vidéo"))
-                                .imageUrl("https://via.placeholder.com/400x300?text=Xbox+Series+X")
-                                .specifications("Zen 3 8-core, RDNA 2, 1TB SSD, 4K 120fps")
+                                .imageUrl("https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=400")
+                                .specifications("4K, 1TB SSD")
                                 .status("ACTIVE")
                                 .rating(4.6)
                                 .reviewCount(198)
                                 .createdAt(LocalDateTime.now())
                                 .build()
                 );
+
                 productRepo.saveAll(products);
             }
         };
     }
 }
-

@@ -117,7 +117,7 @@
             </span>
           </td>
           <td nzAlign="right">
-            <span class="price-cell">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</span>
+{{ product.price | fcfa }}
           </td>
           <td nzAlign="center">
             <nz-tag [nzColor]="getStockColor(product.quantity)">

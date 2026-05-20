@@ -2,7 +2,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -30,6 +30,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { CartService } from '../../../core/services/cart.service';
 import { OrderService } from '../../../core/services/order.service';
 import { ProductService } from '../../../core/services/product.service';
+import { FcfaPipe } from '../../../shared/pipes/fcfa.pipe';
 
 @Component({
   selector: 'app-shop-page',
@@ -39,7 +40,7 @@ import { ProductService } from '../../../core/services/product.service';
     NzBadgeModule, NzButtonModule, NzCardModule, NzDividerModule, NzEmptyModule,
     NzFormModule, NzGridModule, NzIconModule, NzInputModule, NzInputNumberModule,
     NzModalModule, NzRateModule, NzSelectModule, NzSpinModule, NzStatisticModule,
-    NzTableModule, NzTabsModule, NzTagModule
+    NzTableModule, NzTabsModule, NzTagModule, FcfaPipe
   ],
   templateUrl: './shop-page.component.html',
   styleUrls: ['./shop-page.component.scss']
@@ -72,7 +73,8 @@ export class ShopPageComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private orderService: OrderService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -254,5 +256,22 @@ export class ShopPageComponent implements OnInit {
       REFUNDED: 'Remboursée'
     };
     return labels[status] ?? status;
+  }
+
+  viewProductDetail(productId: number): void {
+    this.router.navigate(['/product', productId]);
+  }
+
+  getProductImage(product: Product): string {
+    if (product.imageUrl) {
+      return product.imageUrl;
+    }
+    // Génère une image stable basée sur l'ID du produit
+    const imageId = Math.abs(product.id % 100);
+    return `https://loremflickr.com/600/420/technology?random=${imageId}`;
+  }
+
+  getCartItemImage(imageUrl: string | undefined): string {
+    return imageUrl || `https://loremflickr.com/80/80/technology?random=cart`;
   }
 }

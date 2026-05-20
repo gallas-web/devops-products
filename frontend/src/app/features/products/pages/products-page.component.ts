@@ -24,6 +24,7 @@ import { Category, PageResponse, Product, ProductFilter, ProductRequest, STATUSE
 import { ProductService } from '../../../core/services/product.service';
 import { ProductFormComponent } from '../components/product-form/product-form.component';
 import { ActiveCountPipe, LowStockCountPipe } from '../../../shared/pipes/product.pipes';
+import { FcfaPipe } from '../../../shared/pipes/fcfa.pipe';
 
 @Component({
   selector: 'app-products-page',
@@ -35,7 +36,8 @@ import { ActiveCountPipe, LowStockCountPipe } from '../../../shared/pipes/produc
     NzToolTipModule, NzEmptyModule, NzStatisticModule, NzCardModule,
     NzDividerModule, NzBadgeModule,
     ProductFormComponent,
-    ActiveCountPipe, LowStockCountPipe
+    ActiveCountPipe, LowStockCountPipe,
+    FcfaPipe
   ],
   templateUrl: './products-page.component.html',
   styleUrls: ['./products-page.component.scss']
