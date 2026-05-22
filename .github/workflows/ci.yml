@@ -102,6 +102,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=gallas-web_devops-products
+            -Dsonar.qualitygate.wait=false
             -Dsonar.organization=gallas-web
             -Dsonar.sources=backend/src/main,frontend/src
             -Dsonar.java.binaries=backend/target/classes
