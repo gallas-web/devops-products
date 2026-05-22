@@ -218,6 +218,10 @@ jobs:
         run: |
           sed -i "s|newTag:.*|newTag: \"${{ github.sha }}\"|g" \
             kubernetes/kustomization.yaml
+          sed -i "s|newTag:.*|newTag: \"${{ github.sha }}\"|g" \
+            kubernetes/overlays/production/kustomization.yaml
+          sed -i "s|newTag:.*|newTag: \"${{ github.sha }}\"|g" \
+            kubernetes/overlays/staging/kustomization.yaml
 
       - name: Commit and push manifest update
         run: |
