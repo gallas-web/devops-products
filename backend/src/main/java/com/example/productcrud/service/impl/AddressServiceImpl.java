@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -56,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
     public List<AddressDto> getUserAddresses(Long userId) {
         return addressRepository.findByUserId(userId).stream()
                 .map(this::mapToAddressDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

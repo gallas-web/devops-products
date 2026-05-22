@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -105,7 +106,7 @@ public class AdminServiceImpl implements AdminService {
         List<Product> lowStockProducts = productRepository.findAll().stream()
                 .filter(p -> p.getQuantity() < 10)
                 .sorted((p1, p2) -> p1.getQuantity() - p2.getQuantity())
-                .collect(Collectors.toList());
+                .toList();
 
         int start = page * size;
         int end = Math.min(start + size, lowStockProducts.size());
@@ -113,7 +114,7 @@ public class AdminServiceImpl implements AdminService {
 
         return new PageImpl<>(pageContent.stream()
                 .map(this::mapToProductDto)
-                .collect(Collectors.toList()), pageable, lowStockProducts.size());
+                .toList(), pageable, lowStockProducts.size());
     }
 
     @Override

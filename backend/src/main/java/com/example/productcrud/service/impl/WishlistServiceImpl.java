@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -102,7 +102,7 @@ public class WishlistServiceImpl implements WishlistService {
                 .id(wishlist.getId())
                 .items(wishlist.getItems() != null ? wishlist.getItems().stream()
                         .map(this::mapToWishlistItemDto)
-                        .collect(Collectors.toList()) : null)
+                        .toList() : null)
                 .itemCount(wishlist.getItems() != null ? wishlist.getItems().size() : 0)
                 .updatedAt(wishlist.getUpdatedAt())
                 .build();
