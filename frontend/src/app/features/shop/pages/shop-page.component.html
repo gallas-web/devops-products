@@ -1,17 +1,19 @@
 <!-- eslint-disable @angular-eslint/template/prefer-control-flow -->
 <div class="shop-shell">
-
-
-
   <!-- ============================================================
        HERO BANNER
   ============================================================ -->
   <section class="hero">
     <div class="hero-copy">
-      <h1>Top Tech Gear<br>for Your Lifestyle</h1>
+      <h1>Top Tech Gear<br />for Your Lifestyle</h1>
       <p>Discover the latest gadgets &amp; accessories.</p>
       <div class="hero-actions">
-        <button nz-button nzType="primary" nzSize="default" (click)="selectedTab = 0">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="default"
+          (click)="selectedTab = 0"
+        >
           Shop Now
         </button>
         <button nz-button nzSize="default" (click)="selectedTab = 1">
@@ -25,27 +27,30 @@
     </div>
   </section>
 
-<!-- ============================================================
+  <!-- ============================================================
         TRUST BAR
    ============================================================ -->
-   <div class="trust-bar">
-     <span><span nz-icon nzType="car"></span> Free Shipping on Orders Over $50</span>
-     <span><span nz-icon nzType="sync"></span> 30-Day Money Back Guarantee</span>
-     <span><span nz-icon nzType="customer-service"></span> 24/7 Customer Support</span>
-   </div>
+  <div class="trust-bar">
+    <span
+      ><span nz-icon nzType="car"></span> Free Shipping on Orders Over $50</span
+    >
+    <span><span nz-icon nzType="sync"></span> 30-Day Money Back Guarantee</span>
+    <span
+      ><span nz-icon nzType="customer-service"></span> 24/7 Customer
+      Support</span
+    >
+  </div>
 
-   <!-- ============================================================
+  <!-- ============================================================
         MAIN TABS
    ============================================================ -->
   <main>
     <nz-tabset class="commerce-tabs" [(nzSelectedIndex)]="selectedTab">
-
       <!-- ======================================================
            TAB 1 — BOUTIQUE
       ====================================================== -->
       <nz-tab nzTitle="Boutique">
         <section class="catalog-panel">
-
           <!-- Heading -->
           <div class="section-heading">
             <div>
@@ -60,7 +65,12 @@
 
           <!-- Category strip -->
           <div class="category-strip">
-            <button type="button" class="category-pill" [class.active]="!filter.categoryId" (click)="selectCategory()">
+            <button
+              type="button"
+              class="category-pill"
+              [class.active]="!filter.categoryId"
+              (click)="selectCategory()"
+            >
               <span nz-icon nzType="appstore"></span>
               Tous
             </button>
@@ -69,7 +79,8 @@
               class="category-pill"
               *ngFor="let category of categories"
               [class.active]="filter.categoryId === category.id"
-              (click)="selectCategory(category.id)">
+              (click)="selectCategory(category.id)"
+            >
               <span nz-icon [nzType]="getCategoryIcon(category)"></span>
               {{ category.name }}
             </button>
@@ -78,30 +89,60 @@
           <!-- Filters -->
           <div class="filters">
             <nz-input-group [nzPrefix]="searchIcon" class="search-field">
-              <input nz-input placeholder="Rechercher un produit, une marque..." [ngModel]="filter.search" (ngModelChange)="onSearch($event)" />
+              <input
+                nz-input
+                placeholder="Rechercher un produit, une marque..."
+                [ngModel]="filter.search"
+                (ngModelChange)="onSearch($event)"
+              />
             </nz-input-group>
-            <ng-template #searchIcon><span nz-icon nzType="search"></span></ng-template>
-            <nz-select nzAllowClear nzPlaceHolder="Catégorie" [ngModel]="filter.categoryId" (ngModelChange)="onCategoryChange($event)">
-              <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
+            <ng-template #searchIcon
+              ><span nz-icon nzType="search"></span
+            ></ng-template>
+            <nz-select
+              nzAllowClear
+              nzPlaceHolder="Catégorie"
+              [ngModel]="filter.categoryId"
+              (ngModelChange)="onCategoryChange($event)"
+            >
+              <nz-option
+                *ngFor="let category of categories"
+                [nzValue]="category.id"
+                [nzLabel]="category.name"
+              ></nz-option>
             </nz-select>
           </div>
 
           <!-- Product grid -->
           <nz-spin [nzSpinning]="loadingProducts">
-            <div class="product-grid" *ngIf="products.content.length; else emptyProducts">
+            <div
+              class="product-grid"
+              *ngIf="products.content.length; else emptyProducts"
+            >
               <article
                 class="product-card"
                 *ngFor="let product of products.content"
-                (click)="viewProductDetail(product.id)">
-
+                tabindex="0"
+                role="button"
+                (click)="viewProductDetail(product.id)"
+                (keydown.enter)="viewProductDetail(product.id)"
+                (keydown.space)="viewProductDetail(product.id)"
+              >
                 <div class="product-image">
                   <img
-                    [src]="product.imageUrl || 'https://dummyimage.com/600x420/1c1c1c/666666?text=' + (product.name | slice:0:20)"
-                    [alt]="product.name" />
+                    [src]="
+                      product.imageUrl ||
+                      'https://dummyimage.com/600x420/1c1c1c/666666?text=' +
+                        (product.name | slice: 0 : 20)
+                    "
+                    [alt]="product.name"
+                  />
+
                   <span
                     class="stock-badge"
                     [class.low]="product.quantity > 0 && product.quantity < 10"
-                    [class.out]="product.quantity === 0">
+                    [class.out]="product.quantity === 0"
+                  >
                     {{ getStockLabel(product) }}
                   </span>
                 </div>
@@ -111,28 +152,35 @@
                     <span>{{ product.category.name }}</span>
                     <span>{{ product.reviewCount || 0 }} avis</span>
                   </div>
+
                   <h3>{{ product.name }}</h3>
                   <p>{{ product.description }}</p>
+
                   <div class="rating-row">
-                    <nz-rate [ngModel]="product.rating || 0" nzDisabled></nz-rate>
+                    <nz-rate
+                      [ngModel]="product.rating || 0"
+                      nzDisabled
+                    ></nz-rate>
                     <small>{{ product.rating || 0 }}/5</small>
                   </div>
+
                   <div class="product-footer">
                     <div>
                       <small>Prix TTC</small>
                       <strong>{{ product.price | fcfa }}</strong>
                     </div>
+
                     <button
                       nz-button
                       nzType="primary"
                       [disabled]="product.quantity === 0"
-                      (click)="$event.stopPropagation(); addProduct(product)">
+                      (click)="$event.stopPropagation(); addProduct(product)"
+                    >
                       <span nz-icon nzType="shopping-cart"></span>
                       Shop Now
                     </button>
                   </div>
                 </div>
-
               </article>
             </div>
             <ng-template #emptyProducts>
@@ -142,17 +190,23 @@
 
           <!-- Pagination -->
           <div class="pager" *ngIf="products.totalPages > 1">
-            <button nz-button [disabled]="(filter.page ?? 0) === 0" (click)="previousPage()">
+            <button
+              nz-button
+              [disabled]="(filter.page ?? 0) === 0"
+              (click)="previousPage()"
+            >
               <span nz-icon nzType="left"></span>
               Précédent
             </button>
-            <span>Page {{ (filter.page ?? 0) + 1 }} / {{ products.totalPages }}</span>
+            <span
+              >Page {{ (filter.page ?? 0) + 1 }} /
+              {{ products.totalPages }}</span
+            >
             <button nz-button [disabled]="products.last" (click)="nextPage()">
               Suivant
               <span nz-icon nzType="right"></span>
             </button>
           </div>
-
         </section>
       </nz-tab>
 
@@ -175,7 +229,11 @@
               <p>{{ cartCount }} article(s)</p>
             </div>
 
-            <nz-table [nzData]="cart?.items || []" [nzFrontPagination]="false" [nzLoading]="loadingCart">
+            <nz-table
+              [nzData]="cart?.items || []"
+              [nzFrontPagination]="false"
+              [nzLoading]="loadingCart"
+            >
               <thead>
                 <tr>
                   <th>Produit</th>
@@ -188,16 +246,35 @@
                 <tr *ngFor="let item of cart?.items">
                   <td>
                     <div class="cart-product">
-                      <img [src]="item.imageUrl || 'https://dummyimage.com/80x80/1c1c1c/666666?text=P'" [alt]="item.productName" />
+                      <img
+                        [src]="
+                          item.imageUrl ||
+                          'https://dummyimage.com/80x80/1c1c1c/666666?text=P'
+                        "
+                        [alt]="item.productName"
+                      />
                       <span>{{ item.productName }}</span>
                     </div>
                   </td>
                   <td>
-                    <nz-input-number [ngModel]="item.quantity" [nzMin]="0" [nzStep]="1" (ngModelChange)="updateQuantity(item.id, $event)"></nz-input-number>
+                    <nz-input-number
+                      [ngModel]="item.quantity"
+                      [nzMin]="0"
+                      [nzStep]="1"
+                      (ngModelChange)="updateQuantity(item.id, $event)"
+                    ></nz-input-number>
                   </td>
-                  <td nzAlign="right"><strong>{{ item.totalPrice | fcfa }}</strong></td>
+                  <td nzAlign="right">
+                    <strong>{{ item.totalPrice | fcfa }}</strong>
+                  </td>
                   <td>
-                    <button nz-button nzDanger nzType="text" (click)="removeItem(item.id)" aria-label="Supprimer">
+                    <button
+                      nz-button
+                      nzDanger
+                      nzType="text"
+                      (click)="removeItem(item.id)"
+                      aria-label="Supprimer"
+                    >
                       <span nz-icon nzType="delete"></span>
                     </button>
                   </td>
@@ -218,12 +295,35 @@
               <strong>Calculée à la commande</strong>
             </div>
             <div class="checkout-form">
-              <input nz-input placeholder="Adresse" [(ngModel)]="checkout.shippingAddress" />
-              <input nz-input placeholder="Ville" [(ngModel)]="checkout.shippingCity" />
-              <input nz-input placeholder="Code postal" [(ngModel)]="checkout.shippingZipCode" />
-              <input nz-input placeholder="Pays" [(ngModel)]="checkout.shippingCountry" />
+              <input
+                nz-input
+                placeholder="Adresse"
+                [(ngModel)]="checkout.shippingAddress"
+              />
+              <input
+                nz-input
+                placeholder="Ville"
+                [(ngModel)]="checkout.shippingCity"
+              />
+              <input
+                nz-input
+                placeholder="Code postal"
+                [(ngModel)]="checkout.shippingZipCode"
+              />
+              <input
+                nz-input
+                placeholder="Pays"
+                [(ngModel)]="checkout.shippingCountry"
+              />
             </div>
-            <button nz-button nzType="primary" nzSize="large" nzBlock [disabled]="!checkoutReady" (click)="createOrder()">
+            <button
+              nz-button
+              nzType="primary"
+              nzSize="large"
+              nzBlock
+              [disabled]="!checkoutReady"
+              (click)="createOrder()"
+            >
               Confirmer la commande
             </button>
           </aside>
@@ -247,7 +347,7 @@
             <div class="order-head">
               <div>
                 <strong>{{ order.orderNumber }}</strong>
-                <p>{{ order.createdAt | date:'medium' }}</p>
+                <p>{{ order.createdAt | date: "medium" }}</p>
               </div>
               <nz-tag>{{ getOrderStatusLabel(order.status) }}</nz-tag>
             </div>
@@ -257,10 +357,12 @@
             </div>
           </article>
 
-          <nz-empty *ngIf="!orders.length" nzNotFoundContent="Aucune commande pour le moment"></nz-empty>
+          <nz-empty
+            *ngIf="!orders.length"
+            nzNotFoundContent="Aucune commande pour le moment"
+          ></nz-empty>
         </section>
       </nz-tab>
-
     </nz-tabset>
 
     <!-- ============================================================
@@ -298,7 +400,6 @@
         </div>
       </div>
     </footer>
-
   </main>
 </div>
 
@@ -308,7 +409,9 @@
 <ng-template #mustLogin>
   <div class="login-empty">
     <nz-empty nzNotFoundContent="Connectez-vous pour accéder à cet espace">
-      <button nz-button nzType="primary" (click)="openAuth('login')">Connexion</button>
+      <button nz-button nzType="primary" (click)="openAuth('login')">
+        Connexion
+      </button>
     </nz-empty>
   </div>
 </ng-template>
@@ -320,27 +423,78 @@
   [nzVisible]="authVisible"
   [nzTitle]="authMode === 'login' ? 'Connexion' : 'Créer un compte'"
   [nzFooter]="null"
-  (nzOnCancel)="authVisible = false">
+  (nzOnCancel)="authVisible = false"
+>
   <ng-container *nzModalContent>
     <form class="auth-form" (ngSubmit)="submitAuth()">
       <ng-container *ngIf="authMode === 'register'">
-        <input nz-input placeholder="Prénom" [(ngModel)]="registerForm.firstName" name="firstName" required />
-        <input nz-input placeholder="Nom" [(ngModel)]="registerForm.lastName" name="lastName" required />
+        <input
+          nz-input
+          placeholder="Prénom"
+          [(ngModel)]="registerForm.firstName"
+          name="firstName"
+          required
+        />
+        <input
+          nz-input
+          placeholder="Nom"
+          [(ngModel)]="registerForm.lastName"
+          name="lastName"
+          required
+        />
       </ng-container>
       <ng-container *ngIf="authMode === 'login'; else registerCredentials">
-        <input nz-input placeholder="Email" [(ngModel)]="loginForm.email" name="loginEmail" required />
-        <input nz-input type="password" placeholder="Mot de passe" [(ngModel)]="loginForm.password" name="loginPassword" required />
+        <input
+          nz-input
+          placeholder="Email"
+          [(ngModel)]="loginForm.email"
+          name="loginEmail"
+          required
+        />
+        <input
+          nz-input
+          type="password"
+          placeholder="Mot de passe"
+          [(ngModel)]="loginForm.password"
+          name="loginPassword"
+          required
+        />
       </ng-container>
       <ng-template #registerCredentials>
-        <input nz-input placeholder="Email" [(ngModel)]="registerForm.email" name="registerEmail" required />
-        <input nz-input type="password" placeholder="Mot de passe" [(ngModel)]="registerForm.password" name="registerPassword" required />
-        <input nz-input type="password" placeholder="Confirmer le mot de passe" [(ngModel)]="registerForm.confirmPassword" name="confirmPassword" required />
+        <input
+          nz-input
+          placeholder="Email"
+          [(ngModel)]="registerForm.email"
+          name="registerEmail"
+          required
+        />
+        <input
+          nz-input
+          type="password"
+          placeholder="Mot de passe"
+          [(ngModel)]="registerForm.password"
+          name="registerPassword"
+          required
+        />
+        <input
+          nz-input
+          type="password"
+          placeholder="Confirmer le mot de passe"
+          [(ngModel)]="registerForm.confirmPassword"
+          name="confirmPassword"
+          required
+        />
       </ng-template>
       <button nz-button nzType="primary" nzBlock type="submit">
-        {{ authMode === 'login' ? 'Se connecter' : 'Créer mon compte' }}
+        {{ authMode === "login" ? "Se connecter" : "Créer mon compte" }}
       </button>
-      <button nz-button nzType="link" type="button" (click)="authMode = authMode === 'login' ? 'register' : 'login'">
-        {{ authMode === 'login' ? 'Créer un compte' : "J'ai déjà un compte" }}
+      <button
+        nz-button
+        nzType="link"
+        type="button"
+        (click)="authMode = authMode === 'login' ? 'register' : 'login'"
+      >
+        {{ authMode === "login" ? "Créer un compte" : "J'ai déjà un compte" }}
       </button>
     </form>
   </ng-container>

@@ -3,6 +3,8 @@ package com.example.productcrud.service.impl;
 import com.example.productcrud.dto.AddressDto;
 import com.example.productcrud.entity.Address;
 import com.example.productcrud.entity.User;
+import com.example.productcrud.exception.BusinessException;
+import com.example.productcrud.exception.ResourceNotFoundException;
 import com.example.productcrud.repository.AddressRepository;
 import com.example.productcrud.repository.UserRepository;
 import com.example.productcrud.service.AddressService;
@@ -13,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -23,11 +24,19 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
 
+    // =========================
+    // CONSTANTES (S1192 FIX)
+    // =========================
+    private static final String USER_NOT_FOUND = "Utilisateur non trouvé";
+    private static final String ADDRESS_NOT_FOUND = "Adresse non trouvée";
+    private static final String ADDRESS_NOT_BELONG_USER =
+            "Cette adresse n'appartient pas à l'utilisateur";
+
     @Override
-    @Transactional
     public AddressDto createAddress(Long userId, CreateAddressRequest request) {
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         Address address = Address.builder()
                 .user(user)
@@ -38,10 +47,11 @@ public class AddressServiceImpl implements AddressService {
                 .country(request.country)
                 .state(request.state)
                 .phoneNumber(request.phoneNumber)
-                .isDefault(request.isDefault != null && request.isDefault)
+                .isDefault(Boolean.TRUE.equals(request.isDefault))
                 .build();
 
-        if (address.getIsDefault()) {
+        if (Boolean.TRUE.equals(address.getIsDefault())) {
+
             addressRepository.findByUserIdAndIsDefaultTrue(userId)
                     .ifPresent(existingDefault -> {
                         existingDefault.setIsDefault(false);
@@ -61,16 +71,18 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressDto getAddress(Long addressId) {
+
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("Adresse non trouvée"));
+                .orElseThrow(() -> new ResourceNotFoundException(ADDRESS_NOT_FOUND));
+
         return mapToAddressDto(address);
     }
 
     @Override
-    @Transactional
     public AddressDto updateAddress(Long addressId, UpdateAddressRequest request) {
+
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("Adresse non trouvée"));
+                .orElseThrow(() -> new ResourceNotFoundException(ADDRESS_NOT_FOUND));
 
         if (request.label != null) address.setLabel(request.label);
         if (request.street != null) address.setStreet(request.street);
@@ -80,12 +92,14 @@ public class AddressServiceImpl implements AddressService {
         if (request.state != null) address.setState(request.state);
         if (request.phoneNumber != null) address.setPhoneNumber(request.phoneNumber);
 
-        if (request.isDefault != null && request.isDefault) {
+        if (Boolean.TRUE.equals(request.isDefault)) {
+
             addressRepository.findByUserIdAndIsDefaultTrue(address.getUser().getId())
                     .ifPresent(existingDefault -> {
                         existingDefault.setIsDefault(false);
                         addressRepository.save(existingDefault);
                     });
+
             address.setIsDefault(true);
         }
 
@@ -93,16 +107,20 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    @Transactional
     public void deleteAddress(Long addressId) {
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("Adresse non trouvée"));
 
-        if (address.getIsDefault()) {
-            List<Address> otherAddresses = addressRepository.findByUserId(address.getUser().getId());
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException(ADDRESS_NOT_FOUND));
+
+        if (Boolean.TRUE.equals(address.getIsDefault())) {
+
+            List<Address> otherAddresses =
+                    addressRepository.findByUserId(address.getUser().getId());
+
             if (!otherAddresses.isEmpty()) {
-                otherAddresses.get(0).setIsDefault(true);
-                addressRepository.save(otherAddresses.get(0));
+                Address first = otherAddresses.get(0);
+                first.setIsDefault(true);
+                addressRepository.save(first);
             }
         }
 
@@ -110,13 +128,13 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    @Transactional
     public AddressDto setDefaultAddress(Long userId, Long addressId) {
+
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("Adresse non trouvée"));
+                .orElseThrow(() -> new ResourceNotFoundException(ADDRESS_NOT_FOUND));
 
         if (!address.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Cette adresse n'appartient pas à l'utilisateur");
+            throw new BusinessException(ADDRESS_NOT_BELONG_USER);
         }
 
         addressRepository.findByUserIdAndIsDefaultTrue(userId)
@@ -126,6 +144,7 @@ public class AddressServiceImpl implements AddressService {
                 });
 
         address.setIsDefault(true);
+
         return mapToAddressDto(addressRepository.save(address));
     }
 

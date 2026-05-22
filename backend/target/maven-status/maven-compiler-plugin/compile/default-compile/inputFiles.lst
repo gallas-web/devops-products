@@ -9,6 +9,7 @@
 /home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/repository/OrderItemRepository.java
 /home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/service/impl/CurrentUserServiceImpl.java
 /home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/service/WishlistService.java
+/home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/exception/BusinessException.java
 /home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/dto/RegisterRequest.java
 /home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/controller/UserController.java
 /home/gallas/Téléchargements/product-crud/backend/src/main/java/com/example/productcrud/entity/OrderItem.java
