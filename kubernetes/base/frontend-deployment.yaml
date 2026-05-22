@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-crud-frontend
+  namespace: product-crud
+  labels:
+    app: product-crud-frontend
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: product-crud-frontend
+  template:
+    metadata:
+      labels:
+        app: product-crud-frontend
+        version: v1
+    spec:
+      
+      containers:
+      - name: frontend
+        # ⚠️ REMPLACER: {{AWS_ACCOUNT_ID}} par votre ID AWS
+        image: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-frontend:latest"
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: API_URL
+          value: "http://product-crud-backend:8080/api"
+        
+        # Probes de santé
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        
+        # Ressources
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+      
+      # Affinity
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - product-crud-frontend
+              topologyKey: kubernetes.io/hostname

@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-crud-backend
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: backend
+          env:
+            - name: ENVIRONMENT
+              value: "production"
