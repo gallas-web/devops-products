@@ -15,9 +15,9 @@ patches:
 
 images:
   - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-backend"
-    newTag: "latest"
+    newTag: "c7f102ea27fdf34d7dd80dd04133182e6b4a56fe"
   - name: "052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-frontend"
-    newTag: "latest"
+    newTag: "c7f102ea27fdf34d7dd80dd04133182e6b4a56fe"
 
 commonAnnotations:
   environment: production
