@@ -1,0 +1,145 @@
+<div class="shopping-cart-page">
+  <div class="page-header">
+    <h1>Mon panier</h1>
+    <a routerLink="/" class="continue-shopping">
+      <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+      Continuer les achats
+    </a>
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <div *ngIf="!loading && cart && cart.items.length > 0; else emptyCart">
+      <div class="cart-items">
+<nz-table #cartTable [nzData]="cart.items" border>
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Prix</th>
+              <th>Quantité</th>
+              <th>Total</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cart.items">
+              <td>
+                <div class="product-info">
+                  <div class="product-name">{{ item.productName }}</div>
+                  <div class="product-sku">Réf: {{ item.productId }}</div>
+                </div>
+              </td>
+<td>{{ item.price | currency:'EUR' }}</td>
+              <td>
+                <nz-input-number
+                  [(ngModel)]="item.quantity"
+                  (ngModelChange)="updateQuantity(item.id, $event)"
+                  style="width: 80px"
+                ></nz-input-number>
+              </td>
+              <td>{{ item.totalPrice | currency:'EUR' }}</td>
+              <td>
+                <button
+                  nz-button
+                  nzSize="small"
+nzDanger
+(click)="removeItem(item.id)"
+                >
+                  <span nz-icon nzType="delete" nzTheme="outline"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+
+      <div class="cart-summary">
+        <h3>Résumé de la commande</h3>
+        <div class="summary-row">
+          <span>Sous-total:</span>
+          <span>{{ getTotalPrice() | currency:'EUR' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Frais de livraison:</span>
+          <span>0,00 EUR</span>
+        </div>
+        <div class="summary-row total">
+          <span>TOTAL:</span>
+          <span>{{ getTotalPrice() | currency:'EUR' }}</span>
+        </div>
+      </div>
+
+      <div class="checkout-section">
+        <h3>Livraison</h3>
+        <div class="form-group">
+          <label>Adresse de livraison</label>
+          <input
+            nz-input
+            [(ngModel)]="checkout.shippingAddress"
+            placeholder="Entrez votre adresse"
+          />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ville</label>
+            <input
+              nz-input
+              [(ngModel)]="checkout.shippingCity"
+              placeholder="Ville"
+            />
+          </div>
+          <div class="form-group">
+            <label>Code postal</label>
+            <input
+              nz-input
+              [(ngModel)]="checkout.shippingZipCode"
+              placeholder="Code postal"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Pays</label>
+          <input
+            nz-input
+            [(ngModel)]="checkout.shippingCountry"
+            placeholder="Pays"
+            value="France"
+          />
+        </div>
+        <div class="form-group">
+          <label>Méthode de paiement</label>
+          <nz-select [(ngModel)]="checkout.paymentMethod" style="width: 100%">
+            <nz-option label="Carte bancaire" value="CARD"></nz-option>
+            <nz-option label="PayPal" value="PAYPAL"></nz-option>
+            <nz-option label="Virement bancaire" value="BANK_TRANSFER"></nz-option>
+          </nz-select>
+        </div>
+        <button
+          nz-button
+          nzType="primary"
+
+          (click)="createOrder()"
+        >
+          <span *ngIf="!checkoutReady">
+            Complétez les informations de livraison
+          </span>
+          <span *ngIf="checkoutReady">
+            Passer la commande
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+          <nz-empty
+          [nzNotFoundContent]="loading ? 'Chargement du panier...' : 'Votre panier est vide'"
+        >
+          <a nz-button nzType="primary" routerLink="/">
+            <span nz-icon nzType="shopping" nzTheme="outline"></span>
+            Retour à la boutique
+          </a>
+        </nz-empty>
+      </div>
+    </ng-template>
+  </nz-spin>
+</div>

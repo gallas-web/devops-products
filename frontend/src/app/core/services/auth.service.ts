@@ -13,6 +13,7 @@ export class AuthService {
   private readonly API_URL = '/api/v1/auth';
   private readonly currentUserSubject = new BehaviorSubject<User | null>(this.readUser());
   currentUser$ = this.currentUserSubject.asObservable();
+  loginUrl: string = '';
 
   constructor(private http: HttpClient) {}
 

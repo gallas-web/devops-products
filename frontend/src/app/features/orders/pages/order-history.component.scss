@@ -1,0 +1,17 @@
+/* Order history styles (currently minimal) */
+
+.order-history-page {
+  display: block;
+}
+
+.filter-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.empty-state {
+  text-align: center;
+}
+

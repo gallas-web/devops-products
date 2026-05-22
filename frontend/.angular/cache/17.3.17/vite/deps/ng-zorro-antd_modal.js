@@ -1,6 +1,15 @@
 import {
+  FocusTrapFactory,
+  isFakeMousedownFromScreenReader,
+  isFakeTouchstartFromScreenReader
+} from "./chunk-X372VTRN.js";
+import {
+  NzI18nService
+} from "./chunk-7H3UXWTQ.js";
+import "./chunk-QQTOD6GC.js";
+import {
   overlayZIndexSetter
-} from "./chunk-J2NRXQUD.js";
+} from "./chunk-UHQJ36BJ.js";
 import {
   CdkScrollableModule,
   Overlay,
@@ -8,7 +17,34 @@ import {
   OverlayRef,
   ScrollDispatcher,
   ViewportRuler
-} from "./chunk-4LKLJHN4.js";
+} from "./chunk-APEWRXWT.js";
+import {
+  ESCAPE,
+  hasModifierKey
+} from "./chunk-27BDGVS6.js";
+import {
+  reqAnimFrame
+} from "./chunk-M3C7YHTV.js";
+import {
+  NzButtonComponent,
+  NzButtonModule
+} from "./chunk-6LUPLACQ.js";
+import {
+  NzIconDirective,
+  NzIconModule
+} from "./chunk-HGQ55JTO.js";
+import "./chunk-5QBFNWJX.js";
+import {
+  NzWaveDirective
+} from "./chunk-DKIHCJL5.js";
+import {
+  _getEventTarget,
+  _getShadowRoot,
+  normalizePassiveListenerOptions
+} from "./chunk-T5IZWXBL.js";
+import {
+  NzTransitionPatchDirective
+} from "./chunk-HDVZL7SE.js";
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
@@ -16,49 +52,17 @@ import {
   PortalModule,
   TemplatePortal
 } from "./chunk-25DEH6HN.js";
-import {
-  NzI18nService
-} from "./chunk-7H3UXWTQ.js";
-import "./chunk-QQTOD6GC.js";
-import {
-  FocusTrapFactory,
-  isFakeMousedownFromScreenReader,
-  isFakeTouchstartFromScreenReader
-} from "./chunk-X372VTRN.js";
-import {
-  ESCAPE,
-  hasModifierKey
-} from "./chunk-27BDGVS6.js";
-import {
-  NzOutletModule,
-  NzStringTemplateOutletDirective
-} from "./chunk-RUMPVZMI.js";
-import {
-  reqAnimFrame
-} from "./chunk-M3C7YHTV.js";
-import {
-  NzButtonComponent,
-  NzButtonModule
-} from "./chunk-OKPCRER4.js";
-import {
-  NzWaveDirective
-} from "./chunk-DKIHCJL5.js";
-import {
-  NzIconDirective,
-  NzIconModule
-} from "./chunk-PO6TWFN6.js";
 import "./chunk-5BZR2V47.js";
-import {
-  NzConfigService
-} from "./chunk-UPFCKCAD.js";
 import {
   Directionality
 } from "./chunk-UFJ3BDEK.js";
 import {
-  _getEventTarget,
-  _getShadowRoot,
-  normalizePassiveListenerOptions
-} from "./chunk-T5IZWXBL.js";
+  NzConfigService
+} from "./chunk-UPFCKCAD.js";
+import {
+  NzOutletModule,
+  NzStringTemplateOutletDirective
+} from "./chunk-RUMPVZMI.js";
 import {
   InputBoolean,
   coerceArray,
@@ -90,9 +94,6 @@ import {
   NgClass,
   NgStyle
 } from "./chunk-E3C72QWO.js";
-import {
-  NzTransitionPatchDirective
-} from "./chunk-HDVZL7SE.js";
 import {
   ANIMATION_MODULE_TYPE,
   ApplicationRef,
@@ -174,13 +175,13 @@ import {
   ɵɵtextInterpolate1,
   ɵɵviewQuery
 } from "./chunk-TK43F535.js";
+import "./chunk-HQARRG7I.js";
 import {
   animationFrameScheduler,
   defer,
   fromEvent,
   merge
 } from "./chunk-DARGOXGJ.js";
-import "./chunk-HQARRG7I.js";
 import {
   BehaviorSubject,
   Observable,

@@ -1,0 +1,134 @@
+<div class="users-page">
+  <div class="page-header">
+    <h1>Gestion des utilisateurs</h1>
+    <div class="action-buttons">
+      <button nz-button nzType="primary" (click)="showAddModal()">
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+        Ajouter un utilisateur
+      </button>
+    </div>
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <nz-table #usersTable [nzData]="users" [nzLoading]="loading" border>
+      <thead>
+        <tr>
+          <th>Nom complet</th>
+          <th>Email</th>
+          <th>Téléphone</th>
+          <th>Adresse</th>
+          <th>Ville</th>
+          <th>Code postal</th>
+          <th>Pays</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone || '-' }}</td>
+          <td>{{ user.address || '-' }}</td>
+          <td>{{ user.city || '-' }}</td>
+          <td>{{ user.zipCode || '-' }}</td>
+          <td>{{ user.country || '-' }}</td>
+          <td>
+            <nz-tag [nzColor]="user.role === 'ADMIN' ? 'blue' : 'green'">
+              {{ user.role === 'ADMIN' ? 'Administrateur' : 'Utilisateur' }}
+            </nz-tag>
+          </td>
+          <td>
+             <nz-tag [nzColor]="getStatusColor(user.enabled)">
+              {{ getStatusText(user.enabled) }}
+            </nz-tag>
+          </td>
+          <td class="action-column">
+            <div class="action-buttons">
+              <button
+                nz-button
+                nzSize="small"
+                nzType="default"
+                (click)="showEditModal(user)"
+                title="Modifier"
+              >
+                <span nz-icon nzType="edit" nzTheme="outline"></span>
+              </button>
+              <button
+                nz-button
+                nzSize="small"
+                nzType="default"
+                (click)="toggleUserStatus(user)"
+                [nzDanger]="!user.enabled"
+                title="{{ user.enabled ? 'Désactiver' : 'Activer' }}"
+              >
+                <span nz-icon nzType="{{ user.enabled ? 'close-circle' : 'check-circle' }}" nzTheme="outline"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="users.length === 0 && !loading">
+          <td colspan="9" class="empty-state">
+<nz-empty [nzNotFoundContent]="'Aucun utilisateur trouvé'"></nz-empty>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-spin>
+
+  <!-- Edit Modal -->
+  <nz-modal
+    [(nzVisible)]="isEditModalVisible"
+    nzTitle="{{ currentUser ? \"Modifier l'utilisateur\" : \"Ajouter un utilisateur\" }}"
+    (nzOnCancel)="handleCancel()"
+    [nzOkText]="currentUser ? 'Mettre à jour' : 'Créer'"
+    [nzOkLoading]="false"
+    (nzOnOk)="currentUser ? handleEditOk() : handleAddOk()"
+  >
+    <form nz-form>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Prénom</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.firstName" placeholder="Prénom" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Nom</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.lastName" placeholder="Nom" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Téléphone</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.phone" placeholder="Téléphone" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Adresse</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.address" placeholder="Adresse" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Ville</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.city" placeholder="Ville" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Code postal</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.zipCode" placeholder="Code postal" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Pays</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input nz-input [(ngModel)]="editUser.country" placeholder="Pays" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+</div>

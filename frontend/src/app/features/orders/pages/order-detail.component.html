@@ -1,0 +1,94 @@
+<div class="order-detail-page">
+  <div class="page-header">
+    <h1>Détail de la commande</h1>
+    <a routerLink="/orders" class="back-link">
+      <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+      Retour aux commandes
+    </a>
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <div *ngIf="!loading && order; else loadingOrEmpty">
+      <nz-card>
+        <div class="order-info">
+          <div class="order-header">
+            <h2>Commande #{{ order.orderNumber }}</h2>
+            <p>Passée le {{ order.createdAt | date }}</p>
+          </div>
+
+          <div class="order-details">
+            <div class="detail-section">
+              <h3>Adresse de livraison</h3>
+              <p>{{ order.shippingAddress }}</p>
+              <p>{{ order.shippingZipCode }} {{ order.shippingCity }}</p>
+              <p>{{ order.shippingCountry }}</p>
+            </div>
+
+            <div class="detail-section">
+              <h3>Articles</h3>
+              <nz-table [nzData]="order.items" border>
+                <thead>
+                  <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.items">
+                    <td>{{ item.productName }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.unitPrice | currency:'EUR' }}</td>
+                    <td>{{ item.totalPrice | currency:'EUR' }}</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </div>
+
+            <div class="detail-section">
+              <h3>Résumé de la commande</h3>
+              <p>Sous-total: {{ order.totalPrice | currency:'EUR' }}</p>
+              <p>Frais de livraison: {{ order.shippingCost | currency:'EUR' }}</p>
+              <p>Taxes: {{ order.tax | currency:'EUR' }}</p>
+              <p class="total">TOTAL: {{ (order.totalPrice + order.shippingCost + order.tax) | currency:'EUR' }}</p>
+            </div>
+
+            <div class="detail-section">
+              <h3>Statuts</h3>
+              <div class="status-item">
+                <span>Statut de la commande:</span>
+                <nz-badge
+                  [nzStatus]="getStatusColor(order.status)"
+                  [nzText]="getStatusLabel(order.status)"
+                ></nz-badge>
+              </div>
+              <div class="status-item">
+                <span>Statut de paiement:</span>
+                <nz-badge
+                  [nzStatus]="getPaymentStatusColor(order.paymentStatus)"
+                  [nzText]="getPaymentStatusLabel(order.paymentStatus)"
+                ></nz-badge>
+              </div>
+              <div *ngIf="order.trackingNumber" class="status-item">
+                <span>Numéro de suivi:</span>
+                <span>{{ order.trackingNumber }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+
+    <ng-template #loadingOrEmpty>
+      <div *ngIf="loading" class="loading-state">
+        <nz-spin>
+          <p>Chargement des détails de la commande...</p>
+        </nz-spin>
+      </div>
+      <div *ngIf="!loading && !order" class="empty-state">
+        <nz-empty [nzNotFoundContent]="'Commande non trouvée'"></nz-empty>
+      </div>
+    </ng-template>
+  </nz-spin>
+</div>

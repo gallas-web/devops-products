@@ -2,16 +2,16 @@ import {
   timeUnits
 } from "./chunk-QQTOD6GC.js";
 import {
-  NzOutletModule,
-  NzStringTemplateOutletDirective
-} from "./chunk-RUMPVZMI.js";
+  Platform
+} from "./chunk-T5IZWXBL.js";
 import "./chunk-5BZR2V47.js";
 import {
   Directionality
 } from "./chunk-UFJ3BDEK.js";
 import {
-  Platform
-} from "./chunk-T5IZWXBL.js";
+  NzOutletModule,
+  NzStringTemplateOutletDirective
+} from "./chunk-RUMPVZMI.js";
 import {
   padStart
 } from "./chunk-KZM6T3SB.js";
@@ -64,8 +64,8 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate
 } from "./chunk-TK43F535.js";
-import "./chunk-DARGOXGJ.js";
 import "./chunk-HQARRG7I.js";
+import "./chunk-DARGOXGJ.js";
 import {
   Subject,
   interval,

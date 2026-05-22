@@ -1,0 +1,156 @@
+<div class="admin-orders-page">
+  <div class="page-header">
+    <h1>Gestion des commandes</h1>
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <nz-table [nzData]="orders" [nzFrontPagination]="false" [nzShowPagination]="false" border>
+      <thead>
+        <tr>
+          <th>Numéro de commande</th>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Total</th>
+          <th>Statut</th>
+          <th>Paiement</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.orderNumber }}</td>
+          <td>{{ order.createdAt | date }}</td>
+          <td>{{ order.userName }}</td>
+          <td>{{ order.totalPrice | currency:'EUR' }}</td>
+          <td>
+            <nz-tag [nzColor]="getStatusColor(order.status)">
+              {{ getStatusLabel(order.status) }}
+            </nz-tag>
+          </td>
+          <td>
+            <nz-tag [nzColor]="getPaymentStatusColor(order.paymentStatus)">
+              {{ getPaymentStatusLabel(order.paymentStatus) }}
+            </nz-tag>
+          </td>
+          <td class="action-column">
+            <div class="action-buttons">
+              <button
+                nz-button
+                nzSize="small"
+                nzType="default"
+                (click)="showOrderDetails(order)"
+                title="Voir les détails"
+              >
+                <span nz-icon nzType="eye" nzTheme="outline"></span>
+              </button>
+              <nz-select
+                nz-size="small"
+                style="width: 100px"
+                [(ngModel)]="tempStatuses[order.id]"
+                (ngModelChange)="updateOrderStatus(order.id, $event)"
+              >
+                <nz-option [nzLabel]="'En attente'" [nzValue]="'PENDING'"></nz-option>
+                <nz-option [nzLabel]="'Confirmée'" [nzValue]="'CONFIRMED'"></nz-option>
+                <nz-option [nzLabel]="'Expédiée'" [nzValue]="'SHIPPED'"></nz-option>
+                <nz-option [nzLabel]="'Livrée'" [nzValue]="'DELIVERED'"></nz-option>
+                <nz-option [nzLabel]="'Annulée'" [nzValue]="'CANCELLED'"></nz-option>
+                <nz-option [nzLabel]="'Remboursée'" [nzValue]="'REFUNDED'"></nz-option>
+              </nz-select>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="orders.length === 0 && !loading">
+          <td colspan="7" class="empty-state">
+            <nz-empty [nzNotFoundContent]="'Aucune commande trouvée'"></nz-empty>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-spin>
+
+  <!-- Order Details Modal -->
+  <nz-modal
+    [(nzVisible)]="isDetailModalVisible"
+    nzTitle="Détails de la commande"
+    (nzOnCancel)="handleDetailCancel()"
+    [nzOkText]="'Fermer'"
+  >
+    <div *ngIf="currentOrder">
+      <div class="order-detail-content">
+        <div class="order-info">
+          <h2>Commande #{{ currentOrder.orderNumber }}</h2>
+          <p>Passée le {{ currentOrder.createdAt | date }}</p>
+        </div>
+
+        <div class="order-details">
+          <div class="detail-row">
+            <span>Client:</span>
+            <span>{{ currentOrder.userName }}</span>
+          </div>
+          <div class="detail-row">
+            <span>Email:</span>
+            <span>{{ currentOrder.userEmail }}</span>
+          </div>
+          <div class="detail-row">
+            <span>Adresse de livraison:</span>
+            <span>{{ currentOrder.shippingAddress }}</span>
+          </div>
+          <div class="detail-row">
+            <span>{{ currentOrder.shippingZipCode }} {{ currentOrder.shippingCity }}</span>
+            <span>{{ currentOrder.shippingCountry }}</span>
+          </div>
+        </div>
+
+        <div class="order-items">
+          <h3>Articles</h3>
+          <nz-table [nzData]="currentOrder.items" [nzFrontPagination]="false" [nzShowPagination]="false" border>
+            <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of currentOrder.items">
+                <td>{{ item.productName }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unitPrice | currency:'EUR' }}</td>
+                <td>{{ item.totalPrice | currency:'EUR' }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+
+        <div class="order-summary">
+          <h3>Résumé</h3>
+<p>Sous-total: {{ currentOrder.totalPrice | currency:'EUR' }}</p>
+          <p>Frais de livraison: {{ currentOrder.shippingCost | currency:'EUR' }}</p>
+          <p>Taxes: {{ currentOrder.tax | currency:'EUR' }}</p>
+          <p class="total">TOTAL: {{ (currentOrder.totalPrice + currentOrder.shippingCost + currentOrder.tax) | currency:'EUR' }}</p>
+        </div>
+
+        <div class="order-status">
+          <h3>Statuts</h3>
+          <div class="status-row">
+            <span>Statut de la commande:</span>
+            <nz-tag [nzColor]="getStatusColor(currentOrder.status)">
+              {{ getStatusLabel(currentOrder.status) }}
+            </nz-tag>
+          </div>
+          <div class="status-row">
+            <span>Statut de paiement:</span>
+            <nz-tag [nzColor]="getPaymentStatusColor(currentOrder.paymentStatus)">
+              {{ getPaymentStatusLabel(currentOrder.paymentStatus) }}
+            </nz-tag>
+          </div>
+          <div *ngIf="currentOrder.trackingNumber" class="status-row">
+            <span>Numéro de suivi:</span>
+            <span>{{ currentOrder.trackingNumber }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-modal>
+</div>

@@ -1,36 +1,58 @@
-.page-container {
-  padding: 24px;
-  background: #f5f5f5;
-  min-height: 100vh;
+/* ============================================================
+   TECHNEST DARK THEME — Products page
+   ============================================================ */
+
+:host {
+  display: block;
+  background: #0a0a0a;
+  font-family: 'Barlow', sans-serif;
+  color: #e8e8e8;
 }
 
+.page-container {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 18px;
   margin-bottom: 24px;
-}
 
-.header-left {
-  .page-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin: 0;
+  .header-left {
+    .page-title {
+      margin: 0;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
 
-    [nz-icon] {
-      margin-right: 10px;
-      color: #1890ff;
+      [nz-icon] {
+        color: #2eb53c;
+      }
+    }
+
+    .page-subtitle {
+      margin: 4px 0 0;
+      color: #555;
+      font-size: 13px;
     }
   }
-
-  .page-subtitle {
-    color: #8c8c8c;
-    margin: 4px 0 0;
-    font-size: 14px;
-  }
 }
 
+/* ============================================================
+   STATS CARDS
+   ============================================================ */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -38,15 +60,20 @@
   margin-bottom: 20px;
 
   .stat-card {
+    background: #141414;
+    border: 1px solid #1f1f1f;
     border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   }
 }
 
+/* ============================================================
+   FILTERS
+   ============================================================ */
 .filter-card {
-  margin-bottom: 16px;
+  background: #141414;
+  border: 1px solid #1f1f1f;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
 
   .filter-row {
     display: flex;
@@ -65,9 +92,13 @@
   }
 }
 
+/* ============================================================
+   TABLE
+   ============================================================ */
 .table-card {
+  background: #141414;
+  border: 1px solid #1f1f1f;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 
   .id-cell {
     color: #8c8c8c;
@@ -76,7 +107,7 @@
 
   .product-name {
     font-weight: 600;
-    color: #1a1a2e;
+    color: #e8e8e8;
   }
 
   .description-cell {
@@ -85,13 +116,35 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #595959;
+    color: #888;
     font-size: 13px;
   }
+}
 
-  .price-cell {
-    font-weight: 700;
-    color: #1890ff;
-    font-size: 15px;
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
   }
 }

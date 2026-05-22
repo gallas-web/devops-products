@@ -1,0 +1,36 @@
+/* Order Detail Page styles */
+.order-detail-page {
+  padding: 24px;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .back-link {
+      color: #1890ff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+  }
+
+  .loading-state {
+    text-align: center;
+    padding: 40px;
+  }
+}

@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <a routerLink="/" class="nav-brand">
+      <span class="brand-icon">🌿</span>
+      <span class="brand-text">TechNest</span>
+    </a>
+
+    <ul class="nav-menu">
+      <li><a routerLink="/">Boutique</a></li>
+      <li><a routerLink="/shop">Panier</a></li>
+      <li><a routerLink="/orders">Commandes</a></li>
+    </ul>
+
+    <div class="nav-icons">
+      <button class="icon-btn" title="Recherche">
+        <span nz-icon nzType="search" nzTheme="outline"></span>
+      </button>
+      <button class="icon-btn" title="Compte" routerLink="/auth/login">
+        <span nz-icon nzType="user" nzTheme="outline"></span>
+      </button>
+      <button class="icon-btn cart-btn" title="Panier" routerLink="/shop">
+        <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+        <span class="cart-badge" *ngIf="cartCount > 0">
+          {{ cartCount }}
+        </span>
+      </button>
+      <ng-container *ngIf="currentUser$ | async as user; else notLoggedIn">
+        <button class="btn btn-logout" (click)="logout()">Déconnexion</button>
+      </ng-container>
+      <ng-template #notLoggedIn>
+        <button class="btn btn-secondary btn-sm" routerLink="/auth/login">Connexion</button>
+      </ng-template>
+    </div>
+  </div>
+</nav>

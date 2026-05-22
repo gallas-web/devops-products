@@ -2,14 +2,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -18,7 +14,6 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -37,9 +32,9 @@ import { FcfaPipe } from '../../../shared/pipes/fcfa.pipe';
   standalone: true,
   imports: [
     CommonModule, FormsModule, RouterLink,
-    NzBadgeModule, NzButtonModule, NzCardModule, NzDividerModule, NzEmptyModule,
-    NzFormModule, NzGridModule, NzIconModule, NzInputModule, NzInputNumberModule,
-    NzModalModule, NzRateModule, NzSelectModule, NzSpinModule, NzStatisticModule,
+    NzBadgeModule, NzButtonModule, NzEmptyModule,
+    NzIconModule, NzInputModule, NzInputNumberModule,
+    NzModalModule, NzRateModule, NzSelectModule, NzSpinModule,
     NzTableModule, NzTabsModule, NzTagModule, FcfaPipe
   ],
   templateUrl: './shop-page.component.html',
@@ -69,6 +64,7 @@ export class ShopPageComponent implements OnInit {
   };
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private productService: ProductService,
     private cartService: CartService,
@@ -78,6 +74,16 @@ export class ShopPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Check for auth query params to auto-open auth modal
+    const url = this.router.url;
+    if (url.includes('auth/login')) {
+      this.authMode = 'login';
+      this.authVisible = true;
+    } else if (url.includes('auth/register')) {
+      this.authMode = 'register';
+      this.authVisible = true;
+    }
+
     this.authService.currentUser$.subscribe(user => {
       this.user = user;
       if (user) {
@@ -260,18 +266,5 @@ export class ShopPageComponent implements OnInit {
 
   viewProductDetail(productId: number): void {
     this.router.navigate(['/product', productId]);
-  }
-
-  getProductImage(product: Product): string {
-    if (product.imageUrl) {
-      return product.imageUrl;
-    }
-    // Génère une image stable basée sur l'ID du produit
-    const imageId = Math.abs(product.id % 100);
-    return `https://loremflickr.com/600/420/technology?random=${imageId}`;
-  }
-
-  getCartItemImage(imageUrl: string | undefined): string {
-    return imageUrl || `https://loremflickr.com/80/80/technology?random=cart`;
   }
 }

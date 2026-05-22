@@ -1,0 +1,103 @@
+<div class="order-history-page">
+  <div class="page-header">
+    <h1>Mes commandes</h1>
+    <div class="filter-container">
+       <nz-select
+         [(ngModel)]="filterStatus"
+         placeholder="Statut"
+         style="width: 150px"
+         (ngModelChange)="loadOrders()"
+       >
+         <nz-option *ngFor="let status of orderStatuses" [nzLabel]="status.label" [nzValue]="status.value">
+         </nz-option>
+       </nz-select>
+       <nz-select
+         [(ngModel)]="filterPaymentStatus"
+         placeholder="Paiement"
+         style="width: 150px"
+         (ngModelChange)="loadOrders()"
+       >
+         <nz-option *ngFor="let status of paymentStatuses" [nzLabel]="status.label" [nzValue]="status.value">
+         </nz-option>
+       </nz-select>
+    </div>
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <nz-table
+      #orderTable
+      [nzData]="(orders$ | async)?.content ?? []"
+      [nzLoading]="loading"
+      (nzQueryParamsChange)="onQueryParamsChange($event)"
+      [nzShowPagination]="true"
+      [nzPageIndex]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[10, 20, 30]"
+      border
+    >
+      <thead>
+        <tr>
+          <th>Numéro de commande</th>
+          <th>Date</th>
+          <th>Articles</th>
+          <th>Total</th>
+          <th>Statut</th>
+          <th>Paiement</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of (orders$ | async)?.content ?? []">
+          <td>{{ order.orderNumber }}</td>
+          <td>{{ order.createdAt | date }}</td>
+          <td>
+            <div *ngFor="let item of order.items; index as i">
+              {{ item.productName }} x{{ item.quantity }}
+              <br *ngIf="i < order.items.length - 1">
+            </div>
+          </td>
+          <td>{{ order.totalPrice + order.shippingCost + order.tax | currency:'EUR' }}</td>
+          <td>
+            <nz-badge
+              [nzStatus]="getStatusColor(order.status)"
+              [nzText]="getStatusLabel(order.status)"
+            ></nz-badge>
+          </td>
+          <td>
+            <nz-badge
+              [nzStatus]="getPaymentStatusColor(order.paymentStatus)"
+              [nzText]="getPaymentStatusLabel(order.paymentStatus)"
+            ></nz-badge>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <a
+                [routerLink]="['/orders', order.id]"
+                class="action-btn view-btn"
+                title="Voir les détails"
+              >
+                <span nz-icon nzType="eye" nzTheme="outline"></span>
+              </a>
+              <a
+                *ngIf="order.trackingNumber"
+                href="#" 
+                class="action-btn track-btn"
+                title="Suivre la livraison"
+              >
+                <span nz-icon nzType="fund-projection-screen" nzTheme="outline"></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!(orders$ | async)?.content?.length || loading">
+          <td colspan="7" class="empty-state">
+            <nz-empty [nzNotFoundContent]="loading ? 'Chargement des commandes...' : 'Aucune commande trouvée'">
+            </nz-empty>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-spin>
+</div>

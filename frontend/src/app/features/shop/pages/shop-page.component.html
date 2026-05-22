@@ -1,103 +1,42 @@
 <!-- eslint-disable @angular-eslint/template/prefer-control-flow -->
 <div class="shop-shell">
 
-  <!-- ============================================================
-       TOPBAR
-  ============================================================ -->
-  <header class="topbar">
-    <a class="brand" href="/" aria-label="NovaShop accueil">
-      <span class="brand-mark" nz-icon nzType="shop"></span>
-      <strong>NovaShop</strong>
-    </a>
 
-    <nav class="nav-links" aria-label="Navigation principale">
-      <button type="button" [class.active]="selectedTab === 0" (click)="selectedTab = 0">Shop</button>
-      <button type="button" [class.active]="selectedTab === 0" (click)="selectedTab = 0">New Arrivals</button>
-      <button type="button" [class.active]="selectedTab === 0" (click)="selectedTab = 0">Best Sellers</button>
-      <button type="button">About</button>
-      <button type="button">Contact</button>
-      <a routerLink="/admin/products">Admin</a>
-    </nav>
-
-    <div class="account">
-      <span nz-icon nzType="search" class="topbar-icon"></span>
-      <ng-container *ngIf="user; else visitor">
-        <span class="avatar">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</span>
-        <button nz-button nzType="default" (click)="logout()">
-          <span nz-icon nzType="logout"></span>
-        </button>
-      </ng-container>
-      <ng-template #visitor>
-        <span nz-icon nzType="user" class="topbar-icon" (click)="openAuth('login')"></span>
-      </ng-template>
-      <button type="button" class="cart-btn" (click)="selectedTab = 1">
-        <span nz-icon nzType="shopping-cart"></span>
-        <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
-      </button>
-    </div>
-  </header>
 
   <!-- ============================================================
        HERO BANNER
   ============================================================ -->
   <section class="hero">
     <div class="hero-copy">
-      <h1>Top Tech Gear<br><span>for Your Lifestyle</span></h1>
-      <p>Explore the latest gadgets &amp; accessories.</p>
+      <h1>Top Tech Gear<br>for Your Lifestyle</h1>
+      <p>Discover the latest gadgets &amp; accessories.</p>
       <div class="hero-actions">
-        <button nz-button nzType="primary" nzSize="large" (click)="selectedTab = 0">
+        <button nz-button nzType="primary" nzSize="default" (click)="selectedTab = 0">
           Shop Now
         </button>
-        <button nz-button nzSize="large" (click)="selectedTab = 1">
+        <button nz-button nzSize="default" (click)="selectedTab = 1">
           <span nz-icon nzType="shopping-cart"></span>
-          Voir le panier
+          Cart
         </button>
       </div>
     </div>
     <div class="hero-media">
-      <img src="https://picsum.photos/900/500?random=42" alt="Top Tech Gear" />
+      <img src="https://picsum.photos/900/500?random=42" alt="Tech gear" />
     </div>
   </section>
 
-  <!-- ============================================================
-       TRUST BAR
-  ============================================================ -->
-  <div class="trust-bar">
-    <span><span nz-icon nzType="car"></span> Free Shipping on Orders Over $50</span>
-    <span><span nz-icon nzType="sync"></span> 30-Day Money Back Guarantee</span>
-    <span><span nz-icon nzType="customer-service"></span> 24/7 Customer Support</span>
-  </div>
+<!-- ============================================================
+        TRUST BAR
+   ============================================================ -->
+   <div class="trust-bar">
+     <span><span nz-icon nzType="car"></span> Free Shipping on Orders Over $50</span>
+     <span><span nz-icon nzType="sync"></span> 30-Day Money Back Guarantee</span>
+     <span><span nz-icon nzType="customer-service"></span> 24/7 Customer Support</span>
+   </div>
 
-  <!-- ============================================================
-       METRICS
-  ============================================================ -->
-  <section class="commerce-metrics" aria-label="Indicateurs boutique">
-    <div>
-      <span nz-icon nzType="database"></span>
-      <div>
-        <strong>{{ products.totalElements }}</strong>
-        <small>produits disponibles</small>
-      </div>
-    </div>
-    <div>
-      <span nz-icon nzType="shopping-cart"></span>
-      <div>
-        <strong>{{ cartCount }}</strong>
-        <small>articles au panier</small>
-      </div>
-    </div>
-    <div>
-      <span nz-icon nzType="gift"></span>
-      <div>
-        <strong>{{ orders.length }}</strong>
-        <small>commandes suivies</small>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       MAIN TABS
-  ============================================================ -->
+   <!-- ============================================================
+        MAIN TABS
+   ============================================================ -->
   <main>
     <nz-tabset class="commerce-tabs" [(nzSelectedIndex)]="selectedTab">
 
@@ -214,36 +153,6 @@
             </button>
           </div>
 
-          <!-- Promo banner -->
-          <div class="promo-banner">
-            <div class="promo-copy">
-              <h3>Boost Your Productivity</h3>
-              <p>Essential Accessories for Work &amp; Play</p>
-              <button nz-button nzType="primary" (click)="selectedTab = 0">Browse Now</button>
-            </div>
-            <div class="promo-media">
-              <img src="https://picsum.photos/700/300?random=10" alt="Productivity gear" />
-            </div>
-          </div>
-
-          <!-- New Arrivals / Best Sellers -->
-          <div class="dual-banner">
-            <div class="dual-card" (click)="selectedTab = 0">
-              <img src="https://picsum.photos/400/260?random=20" alt="New Arrivals" />
-              <div class="dual-overlay">
-                <h4>New Arrivals</h4>
-                <button nz-button nzType="primary">Shop New</button>
-              </div>
-            </div>
-            <div class="dual-card" (click)="selectedTab = 0">
-              <img src="https://picsum.photos/400/260?random=30" alt="Best Sellers" />
-              <div class="dual-overlay">
-                <h4>Best Sellers</h4>
-                <button nz-button nzType="primary">Shop Bestsellers</button>
-              </div>
-            </div>
-          </div>
-
         </section>
       </nz-tab>
 
@@ -257,7 +166,8 @@
 
         <section class="cart-layout" *ngIf="user; else mustLogin">
           <div class="cart-items">
-            <div class="section-heading compact">
+            <!-- Supprimé la classe "compact" qui n'avait pas de règle CSS -->
+            <div class="section-heading">
               <div>
                 <span class="eyebrow">Votre sélection</span>
                 <h2>Panier</h2>

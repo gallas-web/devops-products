@@ -1,0 +1,356 @@
+/* ============================================================
+   TECHNEST DARK THEME — Product Detail
+   ============================================================ */
+
+:host {
+  display: block;
+  background: #0a0a0a;
+  font-family: 'Barlow', sans-serif;
+  color: #e8e8e8;
+}
+
+.detail-container {
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   CARD PRINCIPALE
+   ============================================================ */
+.product-detail {
+  background: #141414;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+  border: 1px solid #1f1f1f;
+}
+
+/* ============================================================
+   IMAGE PRODUIT
+   ============================================================ */
+.image-section {
+  height: 520px;
+  background: linear-gradient(135deg, #1a1a1a, #141414);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #222;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 24px;
+  transition: transform 0.4s ease;
+}
+
+.image-section:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   INFO SECTION
+   ============================================================ */
+.info-section {
+  padding: 10px 20px;
+}
+
+.category-tag {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #0d2010;
+  color: #2eb53c;
+  letter-spacing: 0.4px;
+  border: 1px solid #2eb53c44;
+}
+
+.product-title {
+  font-size: 34px;
+  font-weight: 900;
+  margin: 14px 0;
+  color: #fff;
+  line-height: 1.2;
+}
+
+/* ============================================================
+   RATING
+   ============================================================ */
+.rating-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.rating-text {
+  color: #888;
+  font-weight: 600;
+}
+
+/* ============================================================
+   PRICE
+   ============================================================ */
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.price {
+  font-size: 38px;
+  font-weight: 900;
+  color: #2eb53c;
+  letter-spacing: -0.5px;
+}
+
+/* ============================================================
+   STOCK CARD
+   ============================================================ */
+.stock-section {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #1a1a1a;
+  border-left: 5px solid #2eb53c;
+  margin: 16px 0;
+  font-weight: 700;
+}
+
+.stock-section.stock-low {
+  border-left-color: #f59e0b;
+}
+
+.stock-section.stock-empty {
+  border-left-color: #ef4444;
+}
+
+/* ============================================================
+   DESCRIPTION
+   ============================================================ */
+.description {
+  margin: 22px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #aaa;
+}
+
+/* ============================================================
+   CART SECTION
+   ============================================================ */
+.cart-section {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid #1f1f1f;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+
+  label {
+    color: #aaa;
+    font-weight: 600;
+  }
+}
+
+/* ============================================================
+   BUTTONS PREMIUM
+   ============================================================ */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.action-buttons button {
+  border-radius: 12px;
+  font-weight: 800;
+  transition: all 0.25s ease;
+}
+
+.action-buttons button[nzType="primary"] {
+  background: #2eb53c;
+  border-color: #2eb53c;
+  box-shadow: 0 10px 20px rgba(46, 181, 60, 0.25);
+}
+
+.action-buttons button[nzType="primary"]:hover {
+  background: #26a033;
+  transform: translateY(-2px);
+}
+
+.action-buttons button[nzType="default"] {
+  background: #1a1a1a;
+  border-color: #2a2a2a;
+  color: #ccc;
+}
+
+.action-buttons button[nzType="default"]:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   SPECIFICATIONS
+   ============================================================ */
+.specifications {
+  margin-top: 34px;
+  padding: 18px;
+  background: #1a1a1a;
+  border-radius: 14px;
+  border: 1px solid #1f1f1f;
+
+  h3 {
+    margin-bottom: 10px;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  p {
+    color: #aaa;
+    margin: 0;
+  }
+}
+
+/* ============================================================
+   RELATED PRODUCTS
+   ============================================================ */
+.related-section {
+  margin-top: 60px;
+}
+
+.related-head h2 {
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.related-subtitle {
+  color: #888;
+  font-weight: 600;
+}
+
+/* GRID */
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+/* CARD */
+.related-card {
+  background: #141414;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #1f1f1f;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.related-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  border-color: #2eb53c44;
+}
+
+.related-image {
+  height: 160px;
+  background: #1a1a1a;
+}
+
+.related-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+
+.related-body {
+  padding: 12px;
+}
+
+.related-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 800;
+  color: #2eb53c;
+}
+
+.related-title {
+  font-size: 15px;
+  font-weight: 900;
+  margin: 8px 0;
+  color: #fff;
+}
+
+.related-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.related-price {
+  font-weight: 900;
+  color: #2eb53c;
+}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+.reviews-section {
+  margin-top: 60px;
+  color: #fff;
+}
+
+.review-item {
+  background: #141414;
+  border: 1px solid #1f1f1f;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  transition: 0.2s;
+}
+
+.review-item:hover {
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  border-color: #2eb53c44;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.review-header strong {
+  color: #fff;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .product-detail {
+    padding: 16px;
+  }
+
+  .image-section {
+    height: 380px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}
