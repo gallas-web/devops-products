@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: product-crud-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-crud-backend
+  template:
+    metadata:
+      labels:
+        app: product-crud-backend
+        version: v1
+    spec:
+      containers:
+        - name: backend
+          image: 052464239829.dkr.ecr.eu-north-1.amazonaws.com/product-crud-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+            - name: SPRING_JPA_SHOW_SQL
+              value: "false"
+            - name: AWS_S3_BUCKET
+              value: "product-crud-images-052464239829"
+            - name: AWS_S3_REGION
+              value: "eu-north-1"
+            - name: AWS_S3_BASE_URL
+              value: "https://product-crud-images-052464239829.s3.eu-north-1.amazonaws.com"
+            - name: ENVIRONMENT
+              value: "production"
+            - name: JAVA_OPTS
+              value: "-Xmx256m -Xms128m"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 5
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "768Mi"
+  strategy:
+    canary:
+      # Étapes du canary deployment
+      steps:
+        - setWeight: 20    # 20% du trafic vers la nouvelle version
+        - pause: {duration: 2m}  # Attendre 2 minutes
+        - setWeight: 50    # 50% du trafic
+        - pause: {duration: 2m}  # Attendre 2 minutes
+        - setWeight: 80    # 80% du trafic
+        - pause: {duration: 1m}  # Attendre 1 minute
+        # 100% automatiquement si tout va bien
+      canaryService: product-crud-backend-canary
+      stableService: product-crud-backend
